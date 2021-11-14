@@ -37,7 +37,7 @@ class Transaction extends Model
 
     public function payment_type()
     {
-        return $this->belongsTo(PaymentType::Class, 'payment_type');
+        return $this->belongsTo(PaymentType::class, 'payment_type');
     }
 
     public function pairTransaction(){

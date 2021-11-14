@@ -4,11 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Transaction;
+use App\Models\Category;
 
 class vCard extends Model
 {
-    use HasFactory;
-    use SoftDeletes;
+    public $table = 'vcards';
+
+    protected $primaryKey = 'phone_number';
 
     protected $fillable = [
         'phone_number',
