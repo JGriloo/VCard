@@ -17,10 +17,6 @@ class Category extends Model
 
     public function vcard()
     {
-<<<<<<< HEAD
         return $this->belongsTo(VCard::class, 'vcard');
-=======
-        return $this->belongsTo(vCard::class, 'vcard');
->>>>>>> a0c8f9e02fc6586ac3c29865e2649609e267f30b
     }
 }
