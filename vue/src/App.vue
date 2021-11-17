@@ -1,46 +1,30 @@
-
 <template>
-  <CreateVcard/>
+  <div id="nav">
+    <router-link :to="{name: 'Home'}">Home </router-link>
+    <router-link :to="{name: 'Create'}">Create VCard </router-link>
+  </div>
+  <router-view/>
 </template>
 
-
-<script>
-
-import CreateVcard from './components/CreateVcard.vue'
-
-export default {
-  name: 'app',
-  components: {
-    CreateVcard
-  },
-  data () {
-    return {
-    }
-  },
-  methods: {
-
-  }
-}
-</script>
-
 <style lang="scss">
-
-
-.avatar-img {
-  margin: -1.2rem 0.8rem -2rem 0.8rem;
-  width: 3.3rem;
-  height: 3.3rem;
-  // border-width: 1px;
-  // border-color: rgb(33, 37, 41);
-  // border-style: solid;
-}
-.avatar-text {
-  line-height: 2.2rem;
-  margin: 1rem 0.5rem -2rem 0;
-  padding-top: 1rem;
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
 }
 
-.dropdown-item {
-  font-size: 0.875rem;
+#nav {
+  padding: 30px;
+
+  a {
+    font-weight: bold;
+    color: #2c3e50;
+
+    &.router-link-exact-active {
+      color: #42b983;
+    }
+  }
 }
 </style>
