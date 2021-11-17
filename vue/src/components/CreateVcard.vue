@@ -32,9 +32,9 @@ export default {
         handleSubmit(){
             //console.log('form submitted')
             this.phoneNrError = this.phoneNr.length == 9 ?
-            '':'Invalid phone number'
+            'Invalid phone number':''
             if (this.phoneNr <900000000 || this.phoneNr>999999999) {
-                this.phoneNrError = 'Phone number must start with 9'
+                this.phoneNrError = 'Invalid phone number'
             }
             if(!this.phoneNrError){
                 console.log('phone nr: ',this.phoneNr)
