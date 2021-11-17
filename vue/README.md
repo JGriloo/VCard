@@ -1,4 +1,4 @@
-# vue
+# todo_template
 
 ## Project setup
 ```
