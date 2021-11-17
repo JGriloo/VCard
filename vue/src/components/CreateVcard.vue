@@ -1,7 +1,7 @@
 <template>
     <form @submit.prevent="handleSubmit">
         <label >Phone Number:</label>
-        <input type="number" min="900000000" max="999999999" required v-model="phoneNr">
+        <input type="number" min=0 required v-model="phoneNr">
         <div v-if="phoneNrError" class="error">{{phoneNrError}}</div>
         <label >Email:</label>
         <input type="email" required v-model="email">
@@ -15,8 +15,10 @@
     </form>
 </template>
 
+
 <script>
 export default {
+    
     data(){
         return{
             phoneNr:'',
@@ -29,8 +31,11 @@ export default {
     methods:{
         handleSubmit(){
             //console.log('form submitted')
-            this.phoneNrError = this.password.length == 9 ?
-            '' : 'Phone number must be a valid number'
+            this.phoneNrError = this.phoneNr.length == 9 ?
+            '':'Invalid phone number'
+            if (this.phoneNr <900000000 || this.phoneNr>999999999) {
+                this.phoneNrError = 'Phone number must start with 9'
+            }
             if(!this.phoneNrError){
                 console.log('phone nr: ',this.phoneNr)
                 console.log('email: ',this.email)
