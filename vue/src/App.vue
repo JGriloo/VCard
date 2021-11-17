@@ -1,4 +1,5 @@
 <template>
+<<<<<<< HEAD
   <CreateVcard/>
 </template>
 
@@ -18,10 +19,24 @@ export default {
   },
   methods: {
 
+=======
+  <img alt="Vue logo" src="./assets/logo.png">
+  <HelloWorld msg="Welcome to Your Vue.js App"/>
+</template>
+
+<script>
+import HelloWorld from './components/HelloWorld.vue'
+
+export default {
+  name: 'App',
+  components: {
+    HelloWorld
+>>>>>>> a0c8f9e02fc6586ac3c29865e2649609e267f30b
   }
 }
 </script>
 
+<<<<<<< HEAD
 <style lang="scss">
 
 
@@ -41,5 +56,15 @@ export default {
 
 .dropdown-item {
   font-size: 0.875rem;
+=======
+<style>
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  margin-top: 60px;
+>>>>>>> a0c8f9e02fc6586ac3c29865e2649609e267f30b
 }
 </style>

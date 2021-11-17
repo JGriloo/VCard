@@ -4,7 +4,11 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
+<<<<<<< HEAD
         <title>Laraveeeel</title>
+=======
+        <title>Laraveeel</title>
+>>>>>>> a0c8f9e02fc6586ac3c29865e2649609e267f30b
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
