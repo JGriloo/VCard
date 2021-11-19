@@ -13,9 +13,6 @@ npm-debug.log
 yarn-error.log
 /.idea
 /.vscode
-<<<<<<< HEAD
-=======
 /database
 docker-compose.yml
 composer.lock
->>>>>>> a0c8f9e02fc6586ac3c29865e2649609e267f30b
