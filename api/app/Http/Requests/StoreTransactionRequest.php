@@ -34,9 +34,9 @@ class StoreTransactionRequest extends FormRequest
             'payment_type' => 'required|string|exists:payment_types,code',
             'payment_reference' => 'required|string',
             'pair_transaction' => 'nullable|numeric|exists:transactions,id',
-            'pair_vcard' => 'nullable|string|max:9|exists:vcards, phone_number',
-            'category_id' => 'nullable|integer|exists: categories,id',
-            'description' => 'nullable|string| max:50'
+            'pair_vcard' => 'nullable|string|max:9|exists:vcards,phone_number',
+            'category_id' => 'nullable|integer|exists:categories,id',
+            'description' => 'nullable|string|max:50'
         ];
     }
 }

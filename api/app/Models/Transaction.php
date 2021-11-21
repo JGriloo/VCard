@@ -6,12 +6,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\VCard;
 use App\Models\Category;
+use App\Models\PaymentType;
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Transaction extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     protected $fillable = [
         'vcard',
@@ -43,7 +45,7 @@ class Transaction extends Model
         return $this->belongsTo(Category::class, 'category_id');
     }
 
-    public function payment_type()
+    public function payment_types()
     {
         return $this->belongsTo(PaymentType::class, 'payment_type');
     }

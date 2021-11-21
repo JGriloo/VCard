@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Category extends Model
 {
@@ -11,6 +12,7 @@ class Category extends Model
     use SoftDeletes;
 
     protected $fillable = [
+        'vcard',
         'name',
         'type'
     ];
@@ -18,5 +20,10 @@ class Category extends Model
     public function vcard()
     {
         return $this->belongsTo(VCard::class, 'vcard');
+    }
+
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
     }
 }
