@@ -17,7 +17,6 @@ class TransactionResource extends JsonResource
         return [
             "id" => $this->id,
             "vcard" => $this->vcard,
-            //"vcard_phone" => $this->vcard->phone_number,
             "date" => $this->date,
             "datetime" => $this->datetime,
             "type" => $this->type,
@@ -28,7 +27,6 @@ class TransactionResource extends JsonResource
             "payment_reference" => $this->payment_reference,
             "pair_transaction" => $this->pair_transaction,
             "pair_vcard" => $this->pair_vcard,
-            //"pair_vcard_phone" => $this->vcard->phone_number,
             "category_id" => $this->category_id,
             //"category_name" => $this->category->name,
             "description" => $this->description

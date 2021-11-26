@@ -4,19 +4,28 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class VCard extends Model
 {
     use HasFactory;
     use SoftDeletes;
 
+    protected $primaryKey = 'phone_number';
+    public $table = 'vcards';
+
     protected $fillable = [
         'phone_number',
-        'password',
         'name',
         'email',
         'photo_url',
-        'confirmation_code'
+        'password',
+        'confirmation_code',
+        'blocked',
+        'balance',
+        'max_debit',
+        'custom_options',
+        'custom_data'
     ];
 
     public function categories()

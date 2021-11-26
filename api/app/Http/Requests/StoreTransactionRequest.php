@@ -24,7 +24,19 @@ class StoreTransactionRequest extends FormRequest
     public function rules()
     {
         return [
-            'vcard' => 'required|integer|max:9'
+            'vcard' => 'required|string|max:9|exists:vcards,phone_number',
+            'date' => 'required|date',
+            'datetime' => 'required|date',
+            'type' => 'required|in:C,D',
+            'value' => 'required|numeric',
+            'old_balance' => 'required|numeric',
+            'new_balance' => 'required|numeric',
+            'payment_type' => 'required|string|exists:payment_types,code',
+            'payment_reference' => 'required|string',
+            'pair_transaction' => 'nullable|numeric|exists:transactions,id',
+            'pair_vcard' => 'nullable|string|max:9|exists:vcards,phone_number',
+            'category_id' => 'nullable|integer|exists:categories,id',
+            'description' => 'nullable|string|max:50'
         ];
     }
 }
