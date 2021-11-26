@@ -1,6 +1,9 @@
+
 import { createRouter, createWebHashHistory } from 'vue-router'
 import CreateVCard from '../views/Create.vue'
 import Home from '../views/Home.vue'
+import Login from '../components/auth/Login.vue'
+import Transaction from '../views/Transactions.vue'
 
 const routes = [
   {
@@ -12,7 +15,24 @@ const routes = [
     path: '/create',
     name: 'Create',
     component: CreateVCard
-  }
+  },
+  {
+    path: '/transactions',
+    name:'Transactions',
+    component: Transaction
+  },
+  {
+  path: '/login',
+  name: 'Login',
+  component: Login
+  },
+  // {
+  //   path:'/logout',
+  //   name:'Logout',
+  //   component
+  // }
+
+
 ]
 
 const router = createRouter({

@@ -4,14 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Transaction;
-use App\Models\Category;
 
-class vCard extends Model
+class VCard extends Model
 {
-    public $table = 'vcards';
-
-    protected $primaryKey = 'phone_number';
+    use HasFactory;
+    use SoftDeletes;
 
     protected $fillable = [
         'phone_number',
@@ -24,16 +21,11 @@ class vCard extends Model
 
     public function categories()
     {
-        return $this->hasMany(Category::class, 'vcard');
+        return $this->hasMany(Category::class);
     }
 
     public function transactions()
     {
-        return $this->hasMany(Transaction::class, 'vcard');
-    }
-
-    public function pair_transactions()
-    {
-        return $this->hasMany(Transaction::class, 'pair_vcard');
+        return $this->hasMany(Transaction::class);
     }
 }
