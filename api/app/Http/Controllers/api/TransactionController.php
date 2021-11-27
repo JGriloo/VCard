@@ -7,7 +7,8 @@ use App\Models\VCard;
 use App\Models\Transaction;
 use App\Http\Resources\TransactionResource;
 use App\Http\Requests\StoreTransactionRequest;
-
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Carbon;
 
 class TransactionController extends Controller
 {
@@ -18,16 +19,42 @@ class TransactionController extends Controller
 
     public function getTransactionsOfVCardReceive(VCard $pair_vcard)
     {
-        return TransactionResource::collection($pair_vcard->pair_transactions);
+        return TransactionResource::collection($pair_vcard->pairTransactions);
     }
 
-    public function storeTransaction(StoreTransactionRequest $request)
+    public function storeTransaction(StoreTransactionRequest $request, VCard $vcard)
     {
-        $newTransaction = Transaction::create($request->validated());
-        if($newTransaction->payment_type == 'VCARD'){
-            //COMO CRIAR UMA PAIR TRANSACTION? COMO VAMOS DEVOLVER AS DUAS VARIÁVEIS?
-        };
-        return new TransactionResource($newTransaction);
+        DB::transaction(function () use ($request, $vcard){
+            $newTransaction = Transaction::create($request->validated());
+            $newTransaction->update([
+                'old_balance' => VCard::where('phone_number', $newTransaction->vcard)->first()->balance,
+                'new_balance' =>VCard::where('phone_number', $newTransaction->vcard)->first()->balance - $newTransaction->value
+            ]);
+            VCard::where('phone_number', $newTransaction->vcard)->update((['balance'=>($newTransaction->old_balance)-$newTransaction->value]));
+            if($newTransaction->payment_type == 'VCARD'){
+                $pairTransaction = Transaction::create([
+                    'vcard' => $newTransaction->pair_vcard,
+                    'date' => Carbon::now()->format('Y-m-d'),
+                    'datetime' => Carbon::now()->format('Y-m-d H:i:s'),
+                    'type' => $newTransaction->type == 'C' ? 'D' : 'C',
+                    'value' => $newTransaction->value,
+                    'old_balance' => VCard::where('phone_number', $newTransaction->pair_vcard)->first()->balance,
+                    'new_balance' => $newTransaction->type == 'C'
+                    ? VCard::where('phone_number', $newTransaction->pair_vcard)->first()->balance - $newTransaction->value
+                    : VCard::where('phone_number', $newTransaction->pair_vcard)->first()->balance + $newTransaction->value,
+                    'payment_type' => $newTransaction->payment_type,
+                    'payment_reference' => $newTransaction->vcard,
+                    'pair_transaction' => $newTransaction->id,
+                    'pair_vcard' => $newTransaction->vcard
+                ]);
+                $newTransaction->update([
+                    'pair_transaction' => $pairTransaction->id
+                ]);
+                VCard::Where('phone_number', $pairTransaction->vcard)->update((['balance'=>$pairTransaction->new_balance]));
+            }
+        });
+
+	return ["success" => "Data Inserted"];
     }
 
     //Useful to update the category of a transaction
