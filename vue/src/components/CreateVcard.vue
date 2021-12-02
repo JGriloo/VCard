@@ -3,6 +3,8 @@
     <label>Phone Number:</label>
     <input type="number" min="0" required v-model="phoneNr" />
     <div v-if="phoneNrError" class="error">{{ phoneNrError }}</div>
+    <label>Name:</label>
+    <input type="text" required v-model="name" />
     <label>Email:</label>
     <input type="email" required v-model="email" />
     <label>Password:</label>
@@ -17,10 +19,12 @@
 
 
 <script>
+import axios from "axios";
 export default {
   data() {
     return {
       phoneNr: "",
+      name:"",
       email: "",
       password: "",
       confirmationCode: "",
@@ -42,6 +46,7 @@ export default {
         console.log("Confirmation Code: ", this.confirmationCode);
         console.log("Erro nr telefone: ", this.phoneNrError);
       }
+      axios.post('./api/create',{phoneNr:this.phoneNr,name:this.name,email:this.email,password:this.password,confirmationCode:this.confirmationCode,balance:this.balance})
     },
   },
 };

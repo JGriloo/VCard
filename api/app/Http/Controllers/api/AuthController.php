@@ -26,6 +26,7 @@ class AuthController extends Controller
         $request = Request::create(env('PASSPORT_SERVER_URL'). '/oauth/token', 'POST');
         $response = Route::dispatch($request);
         $errorCode = $response->getStatusCode();
+        dd("ola");
         if ($errorCode == '200') {
             return json_decode((string) $response->content(), true);
         } else {

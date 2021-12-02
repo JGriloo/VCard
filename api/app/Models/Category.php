@@ -20,13 +20,10 @@ class Category extends Model
     public function vcard()
     {
         return $this->belongsTo(VCard::class, 'vcard');
-<<<<<<< HEAD
-=======
     }
 
     public function transactions()
     {
         return $this->hasMany(Transaction::class);
->>>>>>> 85a893439755633e53d4e9645198e4e62cf71b14
     }
 }

@@ -4,6 +4,7 @@ import CreateVCard from '../views/Create.vue'
 import Home from '../views/Home.vue'
 import Login from '../components/auth/Login.vue'
 import Transaction from '../views/Transactions.vue'
+// import TransactionHistory from '../views/TransactionsHistory.vue'
 
 const routes = [
   {
@@ -26,6 +27,11 @@ const routes = [
   name: 'Login',
   component: Login
   },
+  // {
+  //   path: '/transactionshistory',
+  //   name: 'TransactionHistory',
+  //   component: TransactionHistory
+  // }
   // {
   //   path:'/logout',
   //   name:'Logout',

@@ -4,6 +4,7 @@
     <router-link  :to="{name: 'Create'}">Create VCard </router-link>
     <router-link :to="{name: 'Transactions'}">Transactions</router-link>
     <router-link  :class="{activ: $router.name=='Login'}"  :to="{name: 'Login'}">Login</router-link>
+    <!-- <router-link :to="{name: 'TransactionsHistory'}" >Transaction History</router-link> -->
     <!-- <router-link  :to="{name: 'Logout'}">Logout</router-link> -->
     <router-view/>
   </div>
@@ -16,7 +17,7 @@ export default {
   name: 'RootComponent',
   data () {
     return {
-      workInProgressProjects: [],
+      
     }
   },
     methods: { 
