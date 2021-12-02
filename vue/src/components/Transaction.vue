@@ -101,27 +101,27 @@ export default {
     methods: {
 
         handleSubmit(){
-            if (this.transactions.payment_type =='VCard' || this.transactions.payment_type =='MBway') {
-                this.pair_vcardError = this.transactions.pair_vcard.length == 9 ?
-                'Invalid Phone Number: needs 9 digits':''
-                if (this.transactions.pair_vcard <900000000 || this.transactions.pair_vcard>999999999) {
-                    this.pair_vcardError = 'Invalid Phone Number: number must start with 9'
-                }
-            }
-            if (this.transactions.payment_type=='Iban') {
-                let regExp = /[A-Z]+$/;
-                if (!regExp.test(this.transactions.pair_vcard.charAt(0)) ||!regExp.test(this.transactions.pair_vcard.charAt(1)) ) {
-                    this.pair_vcardError = 'Invalid Iban: Invalid country code'
-                }
-                if (this.transations.pair_vcard.length<15 || this.transactions.pair_vcard.length>34) {
-                        this.pair_vcardError = 'Invalid Iban: size must be between 22 or 34'
-                }
-            }
-            if (this.transactions.payment_type =='Mastercard' || this.transactions.payment_type =='Visa') {
-                this.pair_vcardError = this.transactions.pair_vcard.length == 16 ?
-                'Invalid Card Number: needs 16 digits':''
-            }
-            String(this.transactions.pair_vcard)
+            // if (this.transactions.payment_type =='VCard' || this.transactions.payment_type =='MBway') {
+            //     this.pair_vcardError = this.transactions.pair_vcard.length == 9 ?
+            //     'Invalid Phone Number: needs 9 digits':''
+            //     if (this.transactions.pair_vcard <900000000 || this.transactions.pair_vcard>999999999) {
+            //         this.pair_vcardError = 'Invalid Phone Number: number must start with 9'
+            //     }
+            // }
+            // if (this.transactions.payment_type=='Iban') {
+            //     let regExp = /[A-Z]+$/;
+            //     if (!regExp.test(this.transactions.pair_vcard.charAt(0)) ||!regExp.test(this.transactions.pair_vcard.charAt(1)) ) {
+            //         this.pair_vcardError = 'Invalid Iban: Invalid country code'
+            //     }
+            //     if (this.transations.pair_vcard.length<15 || this.transactions.pair_vcard.length>34) {
+            //             this.pair_vcardError = 'Invalid Iban: size must be between 22 or 34'
+            //     }
+            // }
+            // if (this.transactions.payment_type =='Mastercard' || this.transactions.payment_type =='Visa') {
+            //     this.pair_vcardError = this.transactions.pair_vcard.length == 16 ?
+            //     'Invalid Card Number: needs 16 digits':''
+            // }
+            // String(this.transactions.pair_vcard)
 
             this.vcard_destiny = this.$axios.get(`vcards/${this.transactions.pair_vcard}`)
             console.log(this.vcard_destiny)
@@ -129,7 +129,7 @@ export default {
 
             this.$axios.post('newtransaction',this.transactions)
             .then((result)=> {
-                debugger
+
                 console.warn(result)
 
             })
