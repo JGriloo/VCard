@@ -16,8 +16,8 @@ let toastOptions = {
 }
 const app = createApp(App).use(store).use(router).use(Toaster, toastOptions)
 
-axios.defaults.baseURL="http://localhost/api"
+axios.defaults.baseURL="http://localhost/api/"
 app.config.globalProperties.$axios = axios
-app.config.globalProperties.$serverUrl = "http://localhost"
+app.config.globalProperties.$serverUrl = "http://localhost/"
 
 app.mount('#app')
