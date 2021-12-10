@@ -49,6 +49,7 @@ Route::middleware('auth:api')->group(function () {
     Route::delete('transactions/{transaction}', [TransactionController::class, 'destroyTransaction']);
     Route::post('transactions', [TransactionController::class, 'store']);
     Route::get('vcards/{vcard}/transactions-send', [TransactionController::class, 'getTransactionsOfVCard']);
+    Route::post('newsaving', [TransactionController::class, 'storeSaving']);
 
     //CATEGORY ROUTES
     Route::get('categories/{category}', [CategoryController::class, 'show']);

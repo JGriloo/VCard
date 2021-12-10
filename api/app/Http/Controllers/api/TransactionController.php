@@ -60,6 +60,26 @@ class TransactionController extends Controller
 	return ["success" => "Data Inserted"];
     }
 
+    public function storeSaving(StoreTransactionRequest $request, VCard $vcard)
+    {
+        DB::transaction(function () use ($request, $vcard){
+            $newTransaction = Transaction::create($request->validated());
+            $actualSavings = json_decode(VCard::where('phone_number', $newTransaction->vcard)->first()->custom_data);
+            if($actualSavings == null){
+                $actualSavings = 0;
+            }
+            $newTransaction->update([
+                'old_balance' => VCard::where('phone_number', $newTransaction->vcard)->first()->balance,
+                'new_balance' =>VCard::where('phone_number', $newTransaction->vcard)->first()->balance - $newTransaction->value,
+                'custom_data' =>json_encode($actualSavings + $newTransaction->value),
+            ]);
+            VCard::where('phone_number', $newTransaction->vcard)->update((['balance'=>($newTransaction->old_balance)-$newTransaction->value]));
+            VCard::where('phone_number', $newTransaction->vcard)->update((['custom_data'=>($newTransaction->custom_data)]));
+        });
+
+	return ["success" => "Data Inserted"];
+    }
+
     //Useful to update the category of a transaction
     public function updateTransaction(StoreTransactionRequest $request, Transaction $transaction)
     {

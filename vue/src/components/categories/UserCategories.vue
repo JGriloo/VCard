@@ -24,7 +24,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="category in categories" :key="category.id">
+          <tr v-for="category in filteredCategories" :key="category.id">
             <td>{{ category.name }}</td>
             <td>{{ category.type }}</td>
             <td>

@@ -28,8 +28,8 @@ class TransactionResource extends JsonResource
             "pair_transaction" => $this->pair_transaction,
             "pair_vcard" => $this->pair_vcard,
             "category_id" => $this->category_id,
-            //"category_name" => $this->category->name,
-            "description" => $this->description
+            "description" => $this->description,
+            "custom_data" => $this->custom_data,
         ];
     }
 }

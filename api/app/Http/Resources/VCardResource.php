@@ -18,7 +18,8 @@ class VCardResource extends JsonResource
                     "confirmation_code" => $this->confirmation_code,
                     "blocked" => $this->blocked,
                     "balance" => $this->balance,
-                    "max_debit" => $this->max_debit
+                    "max_debit" => $this->max_debit,
+                    "custom_data" => $this->custom_data,
                 ];
     }
 }
