@@ -1,45 +1,60 @@
 <template>
-  <div id="nav">
-    <router-link :to="{name: 'Home'}">Home </router-link>
-    <router-link  :to="{name: 'Create'}">Create VCard </router-link>
-    <router-link :to="{name: 'Transactions'}">Transactions</router-link>
-    <router-link  :class="{activ: $router.name=='Login'}"  :to="{name: 'Login'}">Login</router-link>
-    <!-- <router-link :to="{name: 'TransactionsHistory'}" >Transaction History</router-link> -->
-    <!-- <router-link  :to="{name: 'Logout'}">Logout</router-link> -->
-    <router-view/>
+  <div>
+    <Sidebar />
+    <div :style="{ 'margin-left': sidebarWidth }">
+      <router-view />
+    </div>
   </div>
 </template>
 
 
 
 <script>
+import Sidebar from "@/components/sidebar/Sidebar";
+import { sidebarWidth } from "@/components/sidebar/state";
+
 export default {
-  name: 'RootComponent',
-  data () {
-    return {
-      
-    }
+  name: "RootComponent",
+  components: { Sidebar },
+  setup() {
+    return { sidebarWidth };
   },
-    methods: { 
-    logout () { 
-      this.$axios.post('logout') 
-        .then(() => { 
-          this.$toast.success('User has logged out of the application.') 
-          delete this.$axios.defaults.headers.common.Authorization
-          this.$store.commit('resetUser') 
-          this.$router.push({ name: 'Home' })
-        }) 
-        .catch(() => { 
-          this.$toast.error('There was a problem logging out of the application!') 
-        }) 
-    } 
+  computed: {
+    user() {
+      return this.$store.state.user;
+    },
+    userId() {
+      return this.$store.state.user ? this.$store.state.user.id : -1;
+    },
+    userName() {
+      return this.$store.state.user ? this.$store.state.user.name : "";
+    },
+    userPhotoUrl() {
+      let urlPhoto = this.$store.state.user
+        ? this.$store.state.user.photo_url
+        : null;
+      return urlPhoto
+        ? this.$serverUrl + "/storage/fotos/" + urlPhoto
+        : "img/avatar-none.png";
+    },
+    isLoggedIn() {
+      return this.$store.getters["isLoggedIn"];
+    },
+    vcard() {
+      return this.$store.state.vcard;
+    },
   },
-  mounted () {
-    const token = sessionStorage.getItem('token')
-    if (token) {
-      this.$axios.defaults.headers.common.Authorization = "Bearer" + token;
-      this.$store.dispatch('loadUser')
-    }
+  methods: {
+    refresh() {
+      this.$store.dispatch("refresh");
+    },
+  },
+  mounted() {
+    this.$store.dispatch("restoreToken").then((token) => {
+      if (token) {
+        this.$store.dispatch("refresh");
+      }
+    });
     // this.$axios.get('users/' + this.userId + '/projects/inprogress')
     //   .then((response) => {
     //     this.workInProgressProjects = response.data.data
@@ -48,26 +63,7 @@ export default {
     //     console.log(error)
     //   })
   },
-  computed:{
-        user () { 
-      return this.$store.state.user 
-    }, 
-    userId () { 
-      return this.$store.state.user ? this.$store.state.user.id : -1 
-    }, 
-    userName () { 
-      return this.$store.state.user ? this.$store.state.user.name : '' 
-    }, 
-    userPhotoUrl () { 
-      let urlPhoto = this.$store.state.user 
-        ? this.$store.state.user.photo_url 
-        : null 
-      return urlPhoto 
-        ? this.$serverUrl + '/storage/fotos/' + urlPhoto 
-        : 'img/avatar-none.png' 
-    } 
-  }
-}
+};
 </script>
 
 <style lang="scss">
@@ -78,17 +74,14 @@ export default {
   text-align: center;
   color: #2c3e50;
 }
-
 #nav {
   padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
+}
+#nav a {
+  font-weight: bold;
+  color: #2c3e50;
+}
+#nav a.router-link-exact-active {
+  color: #42b983;
 }
 </style>

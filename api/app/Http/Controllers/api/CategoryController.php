@@ -6,7 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Http\Resources\CategoryResource;
 use App\Http\Requests\StoreCategoryRequest;
-
+use App\Http\Resources\DefaultCategoryResource;
+use App\Models\DefaultCategory;
+use App\Models\VCard;
+use Illuminate\Support\Facades\DB;
 
 class CategoryController extends Controller
 {
@@ -24,6 +27,10 @@ class CategoryController extends Controller
     {
         $newCategory = Category::create($request->validated());
         return new CategoryResource($newCategory);
+    }
+
+    public function showMyCategories(VCard $vcard){
+        return CategoryResource::collection($vcard->categories);
     }
 
     public function updateCategory(StoreCategoryRequest $request, Category $category)

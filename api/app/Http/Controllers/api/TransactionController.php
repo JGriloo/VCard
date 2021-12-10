@@ -12,15 +12,16 @@ use Illuminate\Support\Carbon;
 
 class TransactionController extends Controller
 {
-    public function getTransactionsOfVCardSend(VCard $vcard)
+    public function getTransactionsOfVCard(VCard $vcard)
     {
         return TransactionResource::collection($vcard->transactions);
     }
 
-    public function getTransactionsOfVCardReceive(VCard $pair_vcard)
+    public function show(Transaction $transaction)
     {
-        return TransactionResource::collection($pair_vcard->pairTransactions);
+        return new TransactionResource($transaction);
     }
+
 
     public function storeTransaction(StoreTransactionRequest $request, VCard $vcard)
     {
@@ -28,10 +29,10 @@ class TransactionController extends Controller
             $newTransaction = Transaction::create($request->validated());
             $newTransaction->update([
                 'old_balance' => VCard::where('phone_number', $newTransaction->vcard)->first()->balance,
-                'new_balance' =>VCard::where('phone_number', $newTransaction->vcard)->first()->balance - $newTransaction->value
+                'new_balance' =>VCard::where('phone_number', $newTransaction->vcard)->first()->balance - $newTransaction->value,
             ]);
             VCard::where('phone_number', $newTransaction->vcard)->update((['balance'=>($newTransaction->old_balance)-$newTransaction->value]));
-            if($newTransaction->payment_type == 'VCARD'){
+            if($newTransaction->payment_type == 'VCard'){
                 $pairTransaction = Transaction::create([
                     'vcard' => $newTransaction->pair_vcard,
                     'date' => Carbon::now()->format('Y-m-d'),
@@ -45,7 +46,9 @@ class TransactionController extends Controller
                     'payment_type' => $newTransaction->payment_type,
                     'payment_reference' => $newTransaction->vcard,
                     'pair_transaction' => $newTransaction->id,
-                    'pair_vcard' => $newTransaction->vcard
+                    'pair_vcard' => $newTransaction->vcard,
+                    'category_id' => null,
+                    'description' => null,
                 ]);
                 $newTransaction->update([
                     'pair_transaction' => $pairTransaction->id

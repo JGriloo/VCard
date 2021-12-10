@@ -47,6 +47,3 @@ Thumbs.db
 *.flv
 *.mov
 *.wmv
-
-
-api/app/Models/vCard.php

@@ -1,16 +1,18 @@
 <template>
   <form class="row g-3 needs-validation" novalidate>
-    <h3 class="mt-5 mb-3">Login</h3>
+    <h3 class="mt-5 mb-3">Admin Login</h3>
     <hr />
     <div class="mb-3">
       <div class="mb-3">
-        <label for="inputUsername" class="form-label">Phone number</label>
+        <label for="inputEmail" class="form-label">Email</label>
         <input
-          type="text"
+          type="email"
+          name="email"
           class="form-control"
-          id="inputUsername"
+          id="inputEmail"
+          placeholder="Email Address"
           required
-          v-model="credentials.username"
+          v-model="credentials.email"
         />
       </div>
     </div>
@@ -27,17 +29,18 @@
       </div>
     </div>
     <div class="mb-3 d-flex justify-content-center">
-      <button type="button" class="btn btn-primary px-5" @click.prevent="login">
+      <button
+        type="button"
+        class="btn btn-primary px-5"
+        @click.prevent="adminLogin"
+      >
         Login
       </button>
     </div>
     <div class="mb-4 d-flex justify-content-center">
-      <button
-        type="button"
-        class="btn btn-primary px-5"
-        @click="goToAdminLogin()"
-      >
-        Admin Login
+      <button @click="goToUserLogin()" style="background-color: grey">
+        <i class="fas fa-arrow-circle-right"></i>
+        VCard Login
       </button>
     </div>
   </form>
@@ -45,28 +48,28 @@
 
 <script>
 export default {
-  name: "Login",
+  name: "AdminLogin",
   data() {
     return {
       credentials: {
-        username: "",
+        email: "",
         password: "",
       },
       errors: null,
     };
   },
-  emits: ["login"],
+  emits: ["adminLogin"],
   methods: {
-    login() {
+    adminLogin() {
       this.$store
-        .dispatch("login", this.credentials)
+        .dispatch("adminLogin", this.credentials)
         .then(() => {
           this.$toast.success(
-            "User " +
+            "Admin " +
               this.$store.state.user.name +
               " has entered the application."
           );
-          this.$emit("login");
+          this.$emit("adminLogin");
           this.$router.push({ name: "Home" });
         })
         .catch(() => {
@@ -78,23 +81,8 @@ export default {
           console.log(this.credentials.password);
         });
     },
-    logout() {
-      this.$axios
-        .post("logout")
-        .then(() => {
-          this.$toast.success("User has logged out of the application.");
-          delete this.$axios.defaults.headers.common.Authorization;
-          this.$store.commit("resetUser");
-          this.$router.push({ name: "Home" });
-        })
-        .catch(() => {
-          this.$toast.error(
-            "There was a problem logging out of the application!"
-          );
-        });
-    },
-    goToAdminLogin() {
-      this.$router.push("/adminlogin");
+    goToUserLogin() {
+      this.$router.push("/login");
     },
   },
 };

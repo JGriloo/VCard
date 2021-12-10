@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="handleSubmit">
+  <form @submit.prevent="handleSubmit" method="post">
     <label>Phone Number:</label>
     <input type="number" min="0" required v-model="phoneNr" />
     <div v-if="phoneNrError" class="error">{{ phoneNrError }}</div>
@@ -19,23 +19,22 @@
 
 
 <script>
-import axios from "axios";
 export default {
   data() {
     return {
       phoneNr: "",
-      name:"",
+      name: "",
       email: "",
       password: "",
       confirmationCode: "",
       phoneNrError: "",
+      blocked: 0,
+      balance: 0,
+      max_debit: 0,
     };
   },
   methods: {
     handleSubmit() {
-      //console.log('form submitted')
-      this.phoneNrError =
-        this.phoneNr.length == 9 ? "Invalid phone number" : alert("WELL DONE!");
       if (this.phoneNr < 900000000 || this.phoneNr > 999999999) {
         this.phoneNrError = "Invalid phone number";
       }
@@ -44,9 +43,28 @@ export default {
         console.log("email: ", this.email);
         console.log("password: ", this.password);
         console.log("Confirmation Code: ", this.confirmationCode);
-        console.log("Erro nr telefone: ", this.phoneNrError);
+        console.log("Blocked", this.blocked);
+        console.log("Balance ", this.balance);
+        console.log("Max_debit ", this.confirmationCode);
       }
-      axios.post('./api/create',{phoneNr:this.phoneNr,name:this.name,email:this.email,password:this.password,confirmationCode:this.confirmationCode,balance:this.balance})
+      this.$axios
+        .post("newvcard", {
+          phone_number: this.phoneNr.toString(),
+          name: this.name,
+          email: this.email,
+          password: this.password,
+          confirmation_code: this.confirmationCode,
+          balance: this.balance,
+          blocked: this.blocked,
+          max_debit: this.max_debit,
+        })
+        .then((result) => {
+          alert("WELL DONE!");
+          console.warn(result);
+        })
+        .catch((error) => {
+          console.log("ERRRR:: ", error.response.data);
+        });
     },
   },
 };
