@@ -34,12 +34,7 @@ class StoreVCardRequest extends FormRequest
             'blocked' => 'required|numeric',
             'balance' => 'required|numeric',
             'max_debit' => 'required|numeric',
-<<<<<<< HEAD
             'custom_data' => 'nullable|json'
-=======
-                        'custom_data' => 'nullable|json'
-
->>>>>>> TAES21GU-23-savings
         ];
     }
 }
