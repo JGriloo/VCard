@@ -50,6 +50,7 @@ Route::middleware('auth:api')->group(function () {
     Route::post('transactions', [TransactionController::class, 'store']);
     Route::get('vcards/{vcard}/transactions-send', [TransactionController::class, 'getTransactionsOfVCard']);
     Route::post('newsaving', [TransactionController::class, 'storeSaving']);
+    Route::post('removesaving', [TransactionController::class, 'removeSaving']);
 
 
     //CATEGORY ROUTES
