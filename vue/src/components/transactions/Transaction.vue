@@ -153,20 +153,6 @@ export default {
             "Invalid Phone Number: number must start with 9";
         }
       }
-      // if (this.transactions.payment_type=='Iban') {
-      //     let regExp = /[A-Z]+$/;
-      //     if (!regExp.test(this.transactions.pair_vcard.charAt(0)) ||!regExp.test(this.transactions.pair_vcard.charAt(1)) ) {
-      //         this.payment_referenceError = 'Invalid Iban: Invalid country code'
-      //     }
-      //     if (this.transations.pair_vcard.length<15 || this.transactions.pair_vcard.length>34) {
-      //             this.payment_referenceError = 'Invalid Iban: size must be between 22 or 34'
-      //     }
-      // }
-      // if (this.transactions.payment_type =='Mastercard' || this.transactions.payment_type =='Visa') {
-      //     this.payment_referenceError = this.transactions.pair_vcard.length == 16 ?
-      //     'Invalid Card Number: needs 16 digits':''
-      // }
-      // String(this.transactions.pair_vcard)
       if (
         this.transactions.payment_type == "VCARD" ||
         this.transactions.payment_type == "MBWAY"
@@ -188,6 +174,7 @@ export default {
         .then((response) => {
           this.isLoading = false;
           this.categories = response.data.data;
+          this.$router.push("/");
         })
         .catch((error) => {
           console.log("ERRRR:: ", error.response.data);

@@ -52,7 +52,6 @@ Route::middleware('auth:api')->group(function () {
     Route::post('newsaving', [TransactionController::class, 'storeSaving']);
     Route::post('removesaving', [TransactionController::class, 'removeSaving']);
 
-
     //CATEGORY ROUTES
     Route::get('categories/{category}', [CategoryController::class, 'show']);
     Route::get('categories', [CategoryController::class, 'index']);

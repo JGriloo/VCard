@@ -5,6 +5,7 @@ import Home from '../views/Home.vue'
 import Login from '../components/auth/Login.vue'
 import VCard from '../components/vcards/VCard.vue'
 import Transaction from '../components/transactions/Transaction.vue'
+import Saving from '../components/transactions/Saving.vue'
 import Categories from '../components/categories/Categories.vue'
 import UserCategories from '../components/categories/UserCategories.vue'
 import TransactionHistory from '../components/transactions/TransactionHistory.vue'
@@ -16,7 +17,6 @@ import AdminLogin from '../components/auth/AdminLogin.vue'
 import VCardProfile from '../components/vcards/VCardProfile.vue'
 import ChangePassword from "../components/auth/ChangePassword.vue"
 import ChangeCode from "../components/auth/ChangeCode.vue"
-import Saving from '../components/transactions/Saving.vue'
 
 const routes = [
   {
@@ -74,6 +74,12 @@ const routes = [
     path: '/transactions',
     name: 'Transactions',
     component: Transaction,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/savings',
+    name: 'Savings',
+    component: Saving,
     meta: { requiresAuth: true }
   },
   {

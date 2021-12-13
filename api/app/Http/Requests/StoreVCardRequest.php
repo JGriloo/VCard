@@ -34,8 +34,7 @@ class StoreVCardRequest extends FormRequest
             'blocked' => 'required|numeric',
             'balance' => 'required|numeric',
             'max_debit' => 'required|numeric',
-                        'custom_data' => 'nullable|json'
-
+            'custom_data' => 'nullable|json'
         ];
     }
 }

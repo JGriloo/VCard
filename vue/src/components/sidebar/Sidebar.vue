@@ -65,6 +65,9 @@ export default {
     <SidebarLink v-if="isLoggedIn" to="/transactions"
       ><i class="fas fa-dollar-sign"></i> New Transactions</SidebarLink
     >
+    <SidebarLink v-if="isLoggedIn" to="/savings"
+      ><i class="fas fa-piggy-bank"></i> Savings</SidebarLink
+    >
     <SidebarLink v-if="isLoggedIn" to="/mytransactions">
       <i class="fas fa-search-dollar"></i> My Transactions</SidebarLink
     >

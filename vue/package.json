@@ -10,18 +10,12 @@
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.4",
     "@meforma/vue-toaster": "^1.2.2",
-    "@popperjs/core": "^2.10.2",
     "axios": "^0.24.0",
     "core-js": "^3.6.5",
-    "jw-vue-pagination": "^1.0.3",
-    "mathjs": "^10.0.0",
-    "moment": "^2.29.1",
-    "moment-duration-format": "^2.3.2",
     "node": "^16.13.0",
     "node-sass": "^6.0.1",
     "sass-loader": "^10.2.0",
     "vue": "^3.0.0",
-    "vue-axios": "^3.4.0",
     "vue-router": "^4.0.12",
     "vuex": "^4.0.2"
   },

@@ -112,7 +112,7 @@ export default {
         }
       });
     },
-    totalTransacitons() {
+    totalTransactions() {
       return this.filteredTransactions.length;
     },
   },
