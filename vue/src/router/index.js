@@ -16,7 +16,7 @@ import AdminLogin from '../components/auth/AdminLogin.vue'
 import VCardProfile from '../components/vcards/VCardProfile.vue'
 import ChangePassword from "../components/auth/ChangePassword.vue"
 import ChangeCode from "../components/auth/ChangeCode.vue"
-
+import Saving from '../components/transactions/Saving.vue'
 
 const routes = [
   {
@@ -35,6 +35,12 @@ const routes = [
     component: ChangePassword,
     props: route => ({ phone_number: parseInt(route.params.phone_number) })
 
+  },
+  {
+    path: '/savings',
+    name: 'Savings',
+    component: Saving,
+    meta: { requiresAuth: true }
   },
   {
     path: '/code',

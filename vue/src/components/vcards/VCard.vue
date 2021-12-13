@@ -1,10 +1,18 @@
 <template>
-  <VCardDetails
-    :vcard="vcard"
-    :errors="errors"
-    @save="save"
-    @cancel="cancel"
-  ></VCardDetails>
+  <div>
+    <div v-if="isLoading">
+      <img src="../../../public/loading.gif" />
+      <h1>Loading the page</h1>
+    </div>
+    <div v-if="!isLoading">
+      <VCardDetails
+        :vcard="vcard"
+        :errors="errors"
+        @save="save"
+        @cancel="cancel"
+      ></VCardDetails>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -26,6 +34,7 @@ export default {
       //vcard: this.newVcard(),
       vcard: this.newVCard(),
       errors: null,
+      isLoading: true,
     };
   },
   watch: {
@@ -46,6 +55,7 @@ export default {
         name: "",
         email: "",
         photo_url: null,
+        isLoading: true,
       };
     },
     loadVCard(phone_number) {
@@ -57,6 +67,7 @@ export default {
         this.$axios
           .get("vcards/" + phone_number)
           .then((response) => {
+            this.isLoading = false;
             this.vcard = response.data.data;
             console.log(this.vcard);
             this.originalValueStr = this.dataAsString();
