@@ -9,6 +9,8 @@ use App\Models\VCard;
 use App\Http\Resources\VCardResource;
 use App\Http\Requests\StoreVCardRequest;
 use App\Http\Requests\UpdateUserPasswordRequest;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 
 class VCardController extends Controller
 {
@@ -27,10 +29,13 @@ class VCardController extends Controller
         return new VCardResource($request->vcard());
     }
 
-    public function storeVcard(StoreVCardRequest $request)
+    public function storeVCard(StoreVCardRequest $request)
     {
-        $newVCard = VCard::create($request->validated());
-        return new VCardResource($newVCard);
+        DB::transaction(function () use ($request) {
+            $newVCard = VCard::create($request->validated());
+            $newVCard->update((['password'=> Hash::make($request['password'])]));
+            return new VCardResource($newVCard);
+        });
     }
 
     public function updateVCard(StoreVCardRequest $request, VCard $vcard)

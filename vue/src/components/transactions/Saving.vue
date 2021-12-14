@@ -46,18 +46,50 @@ export default {
     };
   },
   methods: {
-    handleSubmit() {
-      this.$axios.post("newsaving", this.savings).then((result) => {
+    handleSubmitAddSaving() {
+      if (this.addSaving.value > this.vcard.balance) {
+        return (this.addSaving_referenceError = "Amount Invalid!");
+      }
+      if (this.addSaving.value.length == 0) {
+        return (this.addSaving_referenceError = "All fields required!");
+      }
+      if (this.addSaving.value <= 0) {
+        return (this.addSaving_referenceError = "Invalid Amount!");
+      } else {
+        this.addSaving_referenceError = "";
+      }
+      this.$axios.post("newsaving", this.addSaving).then((result) => {
         this.$toast.warning("Saving done!", {
-          duration: 1000,
+          duration: 5000,
         });
         this.$router.push("/");
+        console.warn(result);
+      });
+    },
+    handleSubmitRemoveSaving() {
+      if (this.removeSaving.value > this.vcard.custom_data) {
+        return (this.removeSaving_referenceError = "Amount Invalid!");
+      }
+      if (this.removeSaving.value.length == 0) {
+        return (this.removeSaving_referenceError = "All fields required!");
+      }
+      if (this.removeSaving.value <= 0) {
+        return (this.removeSaving_referenceError = "Invalid Amount!");
+      } else {
+        this.removeSaving_referenceError = "";
+      }
+      this.$axios.post("removesaving", this.removeSaving).then((result) => {
+        this.$toast.warning("Withdraw from savings successfully!", {
+          duration: 5000,
+        });
+        this.$router.push("/savings");
         console.warn(result);
       });
     },
     loadVCard() {
       this.$axios.get("vcards/" + this.$store.state.user.id).then((result) => {
         this.vcard = result.data.data;
+        console.log(this.vcard.password);
         this.isLoading = false;
       });
     },

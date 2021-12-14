@@ -70,6 +70,8 @@ export default {
           this.$router.push({ name: "Home" });
         })
         .catch(() => {
+          console.log(this.credentials);
+          console.log(this.credentials.password);
           delete this.$axios.defaults.headers.common.Authorization;
           this.credentials.password = "";
           this.$store.commit("resetUser");
