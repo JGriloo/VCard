@@ -31,11 +31,10 @@ class VCardController extends Controller
 
     public function storeVCard(StoreVCardRequest $request)
     {
-        DB::transaction(function () use ($request) {
-            $newVCard = VCard::create($request->validated());
-            $newVCard->update((['password'=> Hash::make($request['password'])]));
-            return new VCardResource($newVCard);
-        });
+        $dados = $request->validated();
+        $dados['password'] = bcrypt($dados['password']);
+        $newVCard = VCard::create($dados);
+        return new VCardResource($newVCard);
     }
 
     public function updateVCard(StoreVCardRequest $request, VCard $vcard)
