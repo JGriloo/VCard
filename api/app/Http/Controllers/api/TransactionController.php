@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use App\Models\VCard;
 use App\Models\Transaction;
+use Illuminate\Http\Request;
 use App\Http\Resources\TransactionResource;
 use App\Http\Requests\StoreTransactionRequest;
 use Illuminate\Support\Facades\DB;
@@ -12,7 +13,7 @@ use Illuminate\Support\Carbon;
 
 class TransactionController extends Controller
 {
-    public function getTransactionsOfVCard(VCard $vcard)
+    public function getTransactionsOfVCard(Request $request, VCard $vcard)
     {
         return TransactionResource::collection($vcard->transactions);
     }

@@ -29,7 +29,9 @@ class VCardController extends Controller
 
     public function storeVcard(StoreVCardRequest $request)
     {
-        $newVCard = VCard::create($request->validated());
+        $dados = $request->validated();
+        $dados['password'] = bcrypt($dados['password']);
+        $newVCard = VCard::create($dados);
         return new VCardResource($newVCard);
     }
 

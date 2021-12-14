@@ -52,6 +52,11 @@ export default {
     <SidebarLink v-show="user && user.type == 'A'" to="/create"
       >Create vCard</SidebarLink
     >
+
+    <SidebarLink v-show="!user" to="/createvcard"
+      ><i class="fas fa-arrow-circle-right"></i> Create VCard</SidebarLink
+    >
+
     <SidebarLink v-show="!user" to="/login"
       ><i class="fas fa-arrow-circle-right"></i> Login</SidebarLink
     >

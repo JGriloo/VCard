@@ -26,6 +26,9 @@
           <th>Category</th>
           <th>Options</th>
         </thead>
+        <div v-if="totalTransactions == 0">
+          <h1>No data to display</h1>
+        </div>
         <tbody>
           <tr v-for="transaction in filteredTransactions" :key="transaction.id">
             <td>{{ transaction.date }}</td>
@@ -59,6 +62,7 @@
 <script>
 /* eslint-disable vue/no-unused-components */
 import ConfirmationDialog from "../global/ConfirmationDialog.vue";
+//import moment from "moment";
 
 export default {
   name: "Transaction History",

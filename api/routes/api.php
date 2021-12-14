@@ -24,6 +24,9 @@ use App\Http\Controllers\api\DefaultCategoryController;
 Route::post('login', [AuthController::class, 'login']);
 Route::post('adminlogin',[AuthController::class,'adminLogin']);
 
+Route::post('newvcard', [VCardController::class, 'storeVCard']);
+
+
 Route::middleware('auth:api')->group(function () {
     Route::post('logout', [AuthController::class, 'logout']);
     Route::get('users/me', [UserController::class, 'show_me']);
@@ -48,9 +51,9 @@ Route::middleware('auth:api')->group(function () {
     Route::put('transactions/{transaction}', [TransactionController::class, 'updateTransaction']);
     Route::delete('transactions/{transaction}', [TransactionController::class, 'destroyTransaction']);
     Route::post('transactions', [TransactionController::class, 'store']);
-    Route::get('vcards/{vcard}/transactions-send', [TransactionController::class, 'getTransactionsOfVCard']);
     Route::post('newsaving', [TransactionController::class, 'storeSaving']);
     Route::post('removesaving', [TransactionController::class, 'removeSaving']);
+    Route::get('vcards/{vcard}/transactions-send', [TransactionController::class, 'getTransactionsOfVCard']);
 
     //CATEGORY ROUTES
     Route::get('categories/{category}', [CategoryController::class, 'show']);
