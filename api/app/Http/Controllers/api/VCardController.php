@@ -9,6 +9,8 @@ use App\Models\VCard;
 use App\Http\Resources\VCardResource;
 use App\Http\Requests\StoreVCardRequest;
 use App\Http\Requests\UpdateUserPasswordRequest;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 
 class VCardController extends Controller
 {
@@ -27,7 +29,7 @@ class VCardController extends Controller
         return new VCardResource($request->vcard());
     }
 
-    public function storeVcard(StoreVCardRequest $request)
+    public function storeVCard(StoreVCardRequest $request)
     {
         $dados = $request->validated();
         $dados['password'] = bcrypt($dados['password']);

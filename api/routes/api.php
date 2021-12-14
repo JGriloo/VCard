@@ -23,6 +23,7 @@ use App\Http\Controllers\api\DefaultCategoryController;
 
 Route::post('login', [AuthController::class, 'login']);
 Route::post('adminlogin',[AuthController::class,'adminLogin']);
+Route::post('newvcard', [VCardController::class, 'storeVCard']);
 
 Route::post('newvcard', [VCardController::class, 'storeVCard']);
 
@@ -38,7 +39,6 @@ Route::middleware('auth:api')->group(function () {
     Route::get('vcards/{vcard}', [VCardController::class, 'show']);
     Route::get('vcards/me', [VCardController::class, 'show_me']);
     Route::get('vcard/balance', [VCardController::class, 'getBalance']);
-    Route::post('newvcard', [VCardController::class, 'storeVcard']);
     Route::put('vcards/{vcard}', [VCardController::class, 'updateVCard']);
     Route::delete('vcards/{vcard}', [VCardController::class, 'destroyVCard']);
     Route::patch('vcards/{vcard}/password', [vCardController::class, 'update_password']);
