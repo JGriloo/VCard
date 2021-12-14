@@ -93,26 +93,6 @@ export default {
       if (this.removeSaving.value > this.vcard.custom_data) {
         return (this.removeSaving_referenceError = "Amount Invalid!");
       }
-      if (this.removeSaving.value <= 0) {
-        return (this.removeSaving_referenceError = "Invalid Amount!");
-      }
-      if (this.removeSaving.value.length == 0) {
-        return (this.removeSaving_referenceError = "All fields required!");
-      } else {
-        this.removeSaving_referenceError = "";
-      }
-      this.$axios.post("removesaving", this.removeSaving).then((result) => {
-        this.$toast.warning("Withdraw from savings successfully!", {
-          duration: 5000,
-        });
-        this.$router.push("/");
-        console.warn(result);
-      });
-    },
-    handleSubmitRemoveSaving() {
-      if (this.removeSaving.value > this.vcard.custom_data) {
-        return (this.removeSaving_referenceError = "Amount Invalid!");
-      }
       if (this.removeSaving.value.length == 0) {
         return (this.removeSaving_referenceError = "All fields required!");
       }
