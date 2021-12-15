@@ -1,53 +1,45 @@
 <template>
-  <form
-    class="row g-3 needs-validation"
-    novalidate
-  >
+  <form class="row g-3 needs-validation" novalidate>
     <h3 class="mt-5 mb-3">Change Password</h3>
-    <hr>
+    <hr />
     <div class="mb-3">
       <div class="mb-3">
-        <label
-          for="inputCurrentPassword"
-          class="form-label"
-        >Current Password</label>
+        <label for="inputCurrentPassword" class="form-label"
+          >Current Password</label
+        >
         <input
           type="password"
           class="form-control"
           id="inputCurrentPassword"
           required
           v-model="passwords.current_password"
-        >
+        />
       </div>
     </div>
     <div class="mb-3">
       <div class="mb-3">
-        <label
-          for="inputPassword"
-          class="form-label"
-        >New Password</label>
+        <label for="inputPassword" class="form-label">New Password</label>
         <input
           type="password"
           class="form-control"
           id="inputPassword"
           required
           v-model="passwords.password"
-        >
+        />
       </div>
     </div>
     <div class="mb-3">
       <div class="mb-3">
-        <label
-          for="inputPasswordConfirm"
-          class="form-label"
-        >Password Confirmmation</label>
+        <label for="inputPasswordConfirm" class="form-label"
+          >Password Confirmation</label
+        >
         <input
           type="password"
           class="form-control"
           id="inputPasswordConfirm"
           required
           v-model="passwords.password_confirm"
-        >
+        />
       </div>
     </div>
     <div class="mb-3 d-flex justify-content-center">
@@ -55,34 +47,101 @@
         type="button"
         class="btn btn-primary px-5"
         @click.prevent="changePassword"
-      >Change Password</button>
+        style="background-color: green"
+      >
+        Save
+      </button>
+      <button style="background-color: red" @click="$router.back()">
+        Cancel
+      </button>
     </div>
   </form>
 </template>
 
 <script>
 export default {
-  name: 'ChangePassword',
-  data () {
+  name: "ChangePassword",
+  props: {
+    phone_number: {
+      type: Number,
+      default: null,
+    },
+  },
+  data() {
     return {
+      vcard: this.newVCard(),
       passwords: {
-        current_password: '',
-        password: '',
-        password_confirm: ''
+        current_password: "",
+        password: "",
+        password_confirm: "",
       },
       errors: null,
-    }
+    };
   },
-  emits: [
-    'changedPassword',
-  ],
-  methods: {
-    changePassword () {
-      // FALTA FAZER O LOGIN
-      this.$emit('changedPassword')
+  watch: {
+    phone_number: {
+      immediate: true,
+      handler(newValue) {
+        this.loadVCard(newValue);
+      },
     },
-  }
-}
+  },
+  emits: ["changedPassword"],
+  methods: {
+    dataAsString() {
+      return JSON.stringify(this.vcard);
+    },
+    newVCard() {
+      return {
+        phone_number: null,
+        name: "",
+        email: "",
+        photo_url: null,
+      };
+    },
+    loadVCard(phone_number) {
+      this.errors = null;
+      if (!phone_number || phone_number < 0) {
+        this.vcard = this.newVCard();
+        this.originalValueStr = this.dataAsString();
+      } else {
+        this.$axios
+          .get("vcards/" + phone_number)
+          .then((response) => {
+            this.vcard = response.data.data;
+            this.originalValueStr = this.dataAsString();
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+    },
+    changePassword() {
+      this.errors = null;
+      this.$axios
+        .patch("vcards/" + this.phone_number + "/password", this.vcard)
+        .then((response) => {
+          this.$toast.success("Password alterada com sucesso.");
+          this.vcard = response.data.data;
+          this.$emit("changedPassword");
+          this.$store.commit("updateVCard", response.data.data);
+          this.$router.back();
+        })
+        .catch((error) => {
+          if (error.response.status == 422) {
+            this.$toast.error(
+              "The password was not updated due to validation errors!"
+            );
+            this.errors = error.response.data.errors;
+          } else {
+            this.$toast.error(
+              "The password was not updated due to unknown server error!"
+            );
+          }
+        });
+    },
+  },
+};
 </script>
 
 <style scoped>

@@ -6,13 +6,15 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+
+
 const CLIENT_ID = 2;
 
 class AuthController extends Controller
 {
     public function login(Request $request)
     {
-        
+
         request()->request->add([
             'grant_type' => 'password',
             'client_id' => CLIENT_ID,
@@ -22,11 +24,10 @@ class AuthController extends Controller
             'scope'=> '',
         ]);
 
-        
+
         $request = Request::create(env('PASSPORT_SERVER_URL'). '/oauth/token', 'POST');
         $response = Route::dispatch($request);
         $errorCode = $response->getStatusCode();
-        dd("ola");
         if ($errorCode == '200') {
             return json_decode((string) $response->content(), true);
         } else {
@@ -36,6 +37,33 @@ class AuthController extends Controller
             );
         }
     }
+
+     public function adminLogin(Request $request)
+    {
+
+        request()->request->add([
+            'grant_type' => 'password',
+            'client_id' => CLIENT_ID,
+            'client_secret' => env('PASSPORT_SECRET'),
+            'username' => $request->email,
+            'password' => $request->password,
+            'scope'=> '',
+        ]);
+
+
+        $request = Request::create(env('PASSPORT_SERVER_URL'). '/oauth/token', 'POST');
+        $response = Route::dispatch($request);
+        $errorCode = $response->getStatusCode();
+        if ($errorCode == '200') {
+            return json_decode((string) $response->content(), true);
+        } else {
+            return response()->json(
+                ['msg' => 'User credentials are invalid'],
+                $errorCode
+            );
+        }
+    }
+
     public function logout(Request $request)
     {
         $accessToken = $request->user()->token();

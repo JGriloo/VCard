@@ -2,11 +2,12 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\api\CategoryController;
+use App\Http\Controllers\api\AuthController;
 use App\Http\Controllers\api\TransactionController;
 use App\Http\Controllers\api\VCardController;
-use App\Http\Controllers\api\CategoryController;
-use App\Http\Controllers\api\StatisticController;
-use App\Http\Controllers\api\AuthController;
+use App\Http\Controllers\api\UserController;
+use App\Http\Controllers\api\DefaultCategoryController;
 
 
 /*
@@ -20,63 +21,51 @@ use App\Http\Controllers\api\AuthController;
 |
 */
 
-// final class LogMiddleware implements MiddlewareInterface
-// {
-//     private $logger;
+Route::post('login', [AuthController::class, 'login']);
+Route::post('adminlogin',[AuthController::class,'adminLogin']);
 
-// public function __construct(
-//         Logger $logger,
-//     ) {
-//         $this->logger = $logger;
-//     }
-//     public function handle(Request $request, Closure $next)
-//     {
-//         $response = $next($request);
+Route::middleware('auth:api')->group(function () {
+    Route::post('logout', [AuthController::class, 'logout']);
+    Route::get('users/me', [UserController::class, 'show_me']);
+    Route::get('users', [UserController::class, 'index']);
+    Route::post('users/create', [UserController::class, 'store']);
 
-//         $this->logger->info('Dump request', [
-//             'request' => serialize($request),
-//             'response' => serialize($response),
-//         ]);
-                
-//         return $response;
-//     }
-// }
+    //VCARDS ROUTES
+    Route::get('vcards', [VCardController::class, 'index']);
+    Route::get('vcards/{vcard}', [VCardController::class, 'show']);
+    Route::get('vcards/me', [VCardController::class, 'show_me']);
+    Route::get('vcard/balance', [VCardController::class, 'getBalance']);
+    Route::post('newvcard', [VCardController::class, 'storeVcard']);
+    Route::put('vcards/{vcard}', [VCardController::class, 'updateVCard']);
+    Route::delete('vcards/{vcard}', [VCardController::class, 'destroyVCard']);
+    Route::patch('vcards/{vcard}/password', [vCardController::class, 'update_password']);
+    Route::patch('vcards/{vcard}/confirmationcode', [vCardController::class, 'update_confirmationCode'])
+        ->middleware('can:updateConfirmationCode,vcard');
 
-//LOGIN ROUTES
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-    Route::post('login', [AuthController::class,'login']);
+    //TRANSACTION ROUTES
+    Route::post('newtransaction', [TransactionController::class, 'storeTransaction']);
+    Route::get('transactions/{transaction}', [TransactionController::class, 'show']);
+    Route::put('transactions/{transaction}', [TransactionController::class, 'updateTransaction']);
+    Route::delete('transactions/{transaction}', [TransactionController::class, 'destroyTransaction']);
+    Route::post('transactions', [TransactionController::class, 'store']);
+    Route::get('vcards/{vcard}/transactions-send', [TransactionController::class, 'getTransactionsOfVCard']);
+    Route::post('newsaving', [TransactionController::class, 'storeSaving']);
 
+    //CATEGORY ROUTES
+    Route::get('categories/{category}', [CategoryController::class, 'show']);
+    Route::get('categories', [CategoryController::class, 'index']);
+    Route::post('newcategory', [CategoryController::class, 'storeCategory']);
+    Route::put('categories/{category}', [CategoryController::class, 'updateCategory']);
+    Route::delete('categories/{category}', [CategoryController::class, 'destroyCategory']);
+    Route::get('mycategories/{vcard}', [CategoryController::class, 'showMyCategories']);
 
-    Route::middleware('auth:api')->group(function () {
-        Route::post('logout', [AuthController::class,'logout']);
-    });
+    //DEFAULT CATEGORY ROUTES
+    Route::get('defaultcategories', [DefaultCategoryController::class, 'index']);
+    Route::get('defaultcategories/{defaultCategory}', [DefaultCategoryController::class, 'show']);
+    Route::put('defaultcategories/{defaultCategory}', [DefaultCategoryController::class, 'updateDefaultCategory']);
+    Route::delete('defaultcategories/{defaultCategory}', [DefaultCategoryController::class, 'destroyDefaultCategory']);
+
+    //STATISTICS ROUTES
+    Route::get('statistics/{vcard}', [StatisticController::class, 'vcardStats']);
+    Route::get('transactionsperdate', [StatisticController::class, 'transactionsPerDate']);
 });
-
-//VCARDS ROUTES
-Route::get('vcards', [VCardController::class, 'index']);
-Route::get('vcards/{vcard}', [VCardController::class, 'show']);
-Route::post('newvcard', [VCardController::class, 'storeVcard']);
-Route::put('vcards/{vcard}', [VCardController::class, 'updateVCard']);
-Route::delete('vcards/{vcard}', [VCardController::class, 'destroyVCard']);
-
-//TRANSACTION ROUTES
-Route::get('vcards/{vcard}/transactions-send', [TransactionController::class, 'getTransactionsOfVCardSend']);
-Route::get('vcards/{pair_vcard}/transactions-receive', [TransactionController::class, 'getTransactionsOfVCardReceive']);
-Route::post('newtransaction', [TransactionController::class, 'storeTransaction']);
-Route::put('transactions/{transaction}', [TransactionController::class, 'updateTransaction']);
-Route::delete('transactions/{transaction}', [TransactionController::class, 'destroyTransaction']);
-
-//CATEGORY ROUTES
-Route::get('categories', [CategoryController::class, 'index']);
-Route::get('categories/{category}', [CategoryController::class, 'show']);
-Route::post('newcategory', [CategoryController::class, 'storeCategory']);
-Route::put('categories/{category}', [CategoryController::class, 'updateCategory']);
-Route::delete('categories/{category}', [CategoryController::class, 'destroyCategory']);
-
-//STATISTICS ROUTES
-Route::get('statistics/{vcard}', [StatisticController::class, 'vcardStats']);
-Route::get('transactionsperdate', [StatisticController::class, 'transactionsPerDate']);
-
-Route::get('adminstats', [StatisticController::class, 'adminStats']);
-Route::get('adminstatsperdate', [StatisticController::class, 'adminStatsPerDate']);

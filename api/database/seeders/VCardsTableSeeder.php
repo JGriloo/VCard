@@ -73,7 +73,7 @@ class VCardsTableSeeder extends Seeder
     {
         DB::table('vcards')->insert($vCard);
         DB::insert(
-            'insert into categories (type, name, vcard, created_at, updated_at, deleted_at) select type, name, ?, ?, ?, ? from default_categories',
+            'insert into categories (type, name, vcard, created_at, updated_at, deleted_at) select type, name, ?, ?, ?, ? from default_categories order by type desc',
             [
                 $vCard['phone_number'],
                 $vCard['created_at'],

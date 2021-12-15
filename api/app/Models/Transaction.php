@@ -28,7 +28,8 @@ class Transaction extends Model
         'pair_transaction',
         'pair_vcard',
         'category_id',
-        'description'
+        'description',
+        'custom_data',
     ];
 
     public function pairVCard(){

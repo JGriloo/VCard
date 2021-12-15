@@ -31,6 +31,15 @@
         Login
       </button>
     </div>
+    <div class="mb-4 d-flex justify-content-center">
+      <button
+        type="button"
+        class="btn btn-primary px-5"
+        @click="goToAdminLogin()"
+      >
+        Admin Login
+      </button>
+    </div>
   </form>
 </template>
 
@@ -40,38 +49,54 @@ export default {
   data() {
     return {
       credentials: {
-        username: '',
-        password: '',
+        username: "",
+        password: "",
       },
       errors: null,
     };
   },
-  emits: ['login'],
+  emits: ["login"],
   methods: {
     login() {
-      this.$axios.post('login', this.credentials)
-        .then((response) => {
+      this.$store
+        .dispatch("login", this.credentials)
+        .then(() => {
           this.$toast.success(
-            'User ' +
-              this.credentials.username +
-              ' has entered the application.'
+            "User " +
+              this.$store.state.user.name +
+              " has entered the application."
           );
-          this.$axios.defaults.headers.common.Authorization =
-            'Bearer ' + response.data.access_token;
-          sessionStorage.setItem('token', response.data.access_token);
-          this.$store.dispatch('loadUser').then(() => {
-            this.$emit('login');
-            this.$router.push({ name: 'Home' });
-          });
+          this.$emit("login");
+          console.log("emit login",this.$store.state.user)
+          this.$socket.emit('login',this.$store.state.user)
+          this.$router.push({ name: "Home" });
         })
         .catch(() => {
           delete this.$axios.defaults.headers.common.Authorization;
-          this.credentials.password = '';
-          this.$store.commit('resetUser');
-          this.$toast.error('User credentials are invalid!');
-          console.log(this.credentials.username)
-          console.log(this.credentials.password)
+          this.credentials.password = "";
+          this.$store.commit("resetUser");
+          this.$toast.error("User credentials are invalid!");
+          console.log(this.credentials.username);
+          console.log(this.credentials.password);
         });
+    },
+    logout() {
+      this.$axios
+        .post("logout")
+        .then(() => {
+          this.$toast.success("User has logged out of the application.");
+          delete this.$axios.defaults.headers.common.Authorization;
+          this.$store.commit("resetUser");
+          this.$router.push({ name: "Home" });
+        })
+        .catch(() => {
+          this.$toast.error(
+            "There was a problem logging out of the application!"
+          );
+        });
+    },
+    goToAdminLogin() {
+      this.$router.push("/adminlogin");
     },
   },
 };

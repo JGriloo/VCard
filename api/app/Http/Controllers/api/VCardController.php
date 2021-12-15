@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\VCard;
 use App\Http\Resources\VCardResource;
 use App\Http\Requests\StoreVCardRequest;
+use App\Http\Requests\UpdateUserPasswordRequest;
 
 class VCardController extends Controller
 {
@@ -21,9 +22,16 @@ class VCardController extends Controller
         return new VCardResource($vcard);
     }
 
-    public function storeVcard(StoreVCardRequest $request)
+    public function show_me(Request $request)
     {
-        $newVCard = VCard::create($request->validated());
+        return new VCardResource($request->vcard());
+    }
+
+    public function storeVCard(StoreVCardRequest $request)
+    {
+        $dados = $request->validated();
+        $dados['password'] = bcrypt($dados['password']);
+        $newVCard = VCard::create($dados);
         return new VCardResource($newVCard);
     }
 
@@ -33,10 +41,32 @@ class VCardController extends Controller
         return new VCardResource($vcard);
     }
 
+    public function update_password(UpdateUserPasswordRequest $request, VCard $vcard)
+    {
+        /* if (!Hash::check($request['current_password'], $vcard->password)) {
+            return false;
+        } */
+        $vcard->password = bcrypt($request->validated()['password']);
+        $vcard->save();
+        return new VCardResource($vcard);
+    }
+
+    public function update_confirmationCode(UpdateUserConfirmationCodeRequest $request, VCard $vcard)
+    {
+        $vcard->confirmation_code = bcrypt($request->validated()['confirmation_code']);
+        $vcard->save();
+        return new VCardResource($vcard);
+    }
+
     //Soft delete, it will stay in the DB
-    public function destroyVCard(VCard $vcard)
+    public function destroyVCard(vCard $vcard)
     {
         $vcard->delete();
         return new VCardResource($vcard);
+    }
+
+    public function getBalance(Request $request) {
+        $balance = vCard::select('phone_number', 'balance')->where('phone_number', $request->user()->id)->first();
+        return $balance;
     }
 }
