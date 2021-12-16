@@ -8,10 +8,7 @@ use App\Models\User;
 use App\Http\Resources\UserResource;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Requests\UpdateUserPasswordRequest;
-<<<<<<< HEAD
 use Illuminate\Support\Facades\Hash;
-=======
->>>>>>> 2b051026b75e280f09607fa3e9db532d3067424a
 
 
 class UserController extends Controller
@@ -34,11 +31,7 @@ class UserController extends Controller
     public function storeUser(StoreUserRequest $request)
     {
         $newUser = User::create($request->validated());
-<<<<<<< HEAD
         $newUser->password->fill(['password'=> Hash::make($request['password'])]); 
-=======
-        $newUser->password = Hash::make($request['password']);
->>>>>>> 2b051026b75e280f09607fa3e9db532d3067424a
         $newUser->save();
         return new UserResource($newUser);
     }

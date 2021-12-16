@@ -9,11 +9,6 @@ use App\Models\VCard;
 use App\Http\Resources\VCardResource;
 use App\Http\Requests\StoreVCardRequest;
 use App\Http\Requests\UpdateUserPasswordRequest;
-<<<<<<< HEAD
-=======
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\DB;
->>>>>>> 2b051026b75e280f09607fa3e9db532d3067424a
 
 class VCardController extends Controller
 {
