@@ -15,8 +15,8 @@
         </div>
       </div>
 
-        <div class="table-wrapper">
-                <div style="overflow-x: auto">
+      <div class="table-wrapper">
+        <div style="overflow-x: auto">
           <table class="fl-table">
             <td>Total Transactions: {{ totalTransactions }}</td>
             <thead>

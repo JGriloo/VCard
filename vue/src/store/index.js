@@ -149,7 +149,7 @@ export default createStore({
         async SOCKET_updateVcardTransaction(_,vcardId){
             console.log(vcardId)
             if (vcardId) {
-                this.$toast.info(`User #${vcardId} was updated`)
+                this.$toast.info(`User #${vcardId} transaction history was updated`)
             }
             // console.log('Your vcard has been updated with a new transaction')
             // console.log("context",context.state.vcard)
