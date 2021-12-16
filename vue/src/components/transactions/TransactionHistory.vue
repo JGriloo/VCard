@@ -15,8 +15,12 @@
         </div>
       </div>
 
-        <div class="table-wrapper">
-                <div style="overflow-x: auto">
+      <div class="datapicker">
+        <Datepicker v-model="mydate" :enableTimePicker="false" range />
+      </div>
+
+      <div class="table-wrapper">
+        <div style="overflow-x: auto">
           <table class="fl-table">
             <td>Total Transactions: {{ totalTransactions }}</td>
             <thead>
@@ -30,32 +34,39 @@
               <th>Options</th>
             </thead>
             <tbody>
-              <tr
-                v-for="transaction in filteredTransactions"
-                :key="transaction.id"
-              >
-                <td>{{ transaction.date }}</td>
-                <td>{{ transaction.type }}</td>
-                <td>{{ transaction.value }}€</td>
-                <td>{{ transaction.new_balance }}€</td>
-                <td>{{ transaction.payment_type }}</td>
-                <td>{{ transaction.payment_reference }}</td>
-                <td>{{ transaction.category_id }}</td>
-                <td>
-                  <button
-                    class="btn btn-danger btn-sm"
-                    @click="deleteTransaction(transaction)"
-                  >
-                    Delete
-                  </button>
-                  <button
-                    class="btn btn-danger btn-sm"
-                    @click="editTransaction(transaction)"
-                  >
-                    Edit
-                  </button>
-                </td>
-              </tr>
+              <template v-if="!totalTransactions">
+                <tr>
+                  <td>No data to display</td>
+                </tr>
+              </template>
+              <template v-if="totalTransactions">
+                <tr
+                  v-for="transaction in filteredTransactions"
+                  :key="transaction.id"
+                >
+                  <td>{{ transaction.date }}</td>
+                  <td>{{ transaction.type }}</td>
+                  <td>{{ transaction.value }}€</td>
+                  <td>{{ transaction.new_balance }}€</td>
+                  <td>{{ transaction.payment_type }}</td>
+                  <td>{{ transaction.payment_reference }}</td>
+                  <td>{{ transaction.category_id }}</td>
+                  <td>
+                    <button
+                      class="btn btn-danger btn-sm"
+                      @click="deleteTransaction(transaction)"
+                    >
+                      Delete
+                    </button>
+                    <button
+                      class="btn btn-danger btn-sm"
+                      @click="editTransaction(transaction)"
+                    >
+                      Edit
+                    </button>
+                  </td>
+                </tr>
+              </template>
             </tbody>
           </table>
         </div>
@@ -67,11 +78,30 @@
 <script>
 /* eslint-disable vue/no-unused-components */
 import ConfirmationDialog from "../global/ConfirmationDialog.vue";
-
+import Datepicker from 'vue3-date-time-picker';
+import 'vue3-date-time-picker/dist/main.css';
+import { ref } from 'vue';
+import moment from 'moment';
+    
 export default {
   name: "Transaction History",
+  setup() {
+      const date = ref();
+      
+      // For demo purposes assign range from the current date
+      /*onMounted(() => {
+          const startDate = new Date();
+          const endDate = new Date(new Date().setDate(startDate.getDate() + 7));
+          date.value = [startDate, endDate];
+      })*/
+      
+      return {
+          date,
+      }
+  },
   components: {
     ConfirmationDialog,
+    Datepicker
   },
   data() {
     return {
@@ -79,6 +109,7 @@ export default {
       checkedType: [],
       isLoading: true,
       transactionToDelete: null,
+      mydate: null
     };
   },
   methods: {
@@ -101,6 +132,7 @@ export default {
         });
         //this.$socket.emit('user_deleted', user.id)
       });
+      console.log(this.mydate)
     },
     editTransaction(transaction) {
       this.$router.push({
@@ -108,10 +140,16 @@ export default {
         params: { id: transaction.id },
       });
     },
+    
   },
   computed: {
     filteredTransactions: function () {
-      return this.transactions.filter((transaction) => {
+      let startDate = this.mydate ? moment(this.mydate[0]).format('YYYY-MM-DD') : null;
+      let endDate = this.mydate ? moment(this.mydate[1]).format('YYYY-MM-DD') : null;
+
+      console.log("date1   "+startDate)
+      console.log("date2   "+endDate)
+      const transactionsByType = this.transactions.filter((transaction) => {
         if (this.checkedType.length == 0) {
           return this.transactions;
         }
@@ -119,10 +157,25 @@ export default {
           return transaction.type;
         }
       });
+      return transactionsByType.filter(transaction => {
+          const itemDate = moment(transaction.date).format('YYYY-MM-DD')
+          if(!startDate || !endDate)
+            return true;
+          if (startDate && endDate) {
+            return startDate <= itemDate && itemDate <= endDate;
+          }
+          if (startDate && !endDate) {
+            return startDate <= itemDate;
+          }
+          if (!startDate && endDate) {
+            return itemDate <= endDate;
+          }
+          return true;
+        })
     },
     totalTransactions() {
       return this.filteredTransactions.length;
-    },
+    }
   },
   mounted() {
     this.loadTransactions();
@@ -205,6 +258,14 @@ input {
 
 .fl-table tr:nth-child(even) {
   background: #f8f8f8;
+}
+
+.datapicker{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
 }
 
 /* Responsive */
