@@ -217,6 +217,13 @@ input {
   text-decoration: none;
   color: white;
 }
+.datapicker{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+}
 
 .table-wrapper {
   margin: 10px 70px 70px;
@@ -260,13 +267,7 @@ input {
   background: #f8f8f8;
 }
 
-.datapicker{
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  padding: 10px;
-}
+
 
 /* Responsive */
 
