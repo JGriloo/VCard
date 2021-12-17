@@ -114,6 +114,7 @@ export default {
   },
   methods: {
     loadTransactions() {
+      setTimeout(()=>{
       this.$axios
         .get("vcards/" + this.$store.state.user.id + "/transactions-send")
         .then((response) => {
@@ -124,6 +125,7 @@ export default {
         .catch((error) => {
           console.log(error);
         });
+      },5000);
     },
     deleteTransaction(transaction) {
       this.$axios.delete(`transactions/${transaction.id}`).then(() => {

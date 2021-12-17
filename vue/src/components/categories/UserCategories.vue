@@ -71,6 +71,7 @@ export default {
   },
   methods: {
     loadCategories() {
+      setTimeout(()=>{
       this.$axios
         .get("mycategories/" + this.$store.state.user.id)
         .then((response) => {
@@ -80,6 +81,7 @@ export default {
         .catch((error) => {
           console.log("ERRRR:: ", error.response.data);
         });
+      },5000);
     },
     deleteCategory(category) {
       this.$axios.delete(`categories/${category.id}`).then(() => {
