@@ -96,6 +96,7 @@ export default {
             duration: 1000,
           });
           console.log("Category has been updated");
+          this.$socket.emit("updateCategory", this.category);
           this.$router.push("/");
         })
         .catch((error) => {

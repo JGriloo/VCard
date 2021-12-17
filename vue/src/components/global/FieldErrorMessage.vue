@@ -1,9 +1,6 @@
 <template>
-  <div
-    v-if="errors ? errors[fieldName] : false"
-    class="validation-error"
-  >
-    {{ errors[fieldName][0] || '' }}
+  <div v-if="errors ? errors[fieldName] : false" class="validation-error">
+    {{ errors[fieldName][0] || "" }}
   </div>
 </template>
 

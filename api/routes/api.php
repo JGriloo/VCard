@@ -23,7 +23,6 @@ use App\Http\Controllers\api\DefaultCategoryController;
 
 Route::post('login', [AuthController::class, 'login']);
 Route::post('adminlogin',[AuthController::class,'adminLogin']);
-Route::post('newvcard', [VCardController::class, 'storeVCard']);
 
 Route::post('newvcard', [VCardController::class, 'storeVCard']);
 

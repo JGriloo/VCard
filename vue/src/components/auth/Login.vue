@@ -67,11 +67,11 @@ export default {
               " has entered the application."
           );
           this.$emit("login");
+          console.log("emit login", this.$store.state.user);
+          this.$socket.emit("login", this.$store.state.user);
           this.$router.push({ name: "Home" });
         })
         .catch(() => {
-          console.log(this.credentials);
-          console.log(this.credentials.password);
           delete this.$axios.defaults.headers.common.Authorization;
           this.credentials.password = "";
           this.$store.commit("resetUser");

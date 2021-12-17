@@ -37,7 +37,7 @@ class StoreTransactionRequest extends FormRequest
             'pair_vcard' => 'nullable|string|max:9|exists:vcards,phone_number',
             'category_id' => 'nullable|integer|exists:categories,id',
             'description' => 'nullable|string|max:50',
-            'custom_data' => 'nullable|json',
+            'custom_data' => 'nullable|json'
         ];
     }
 }

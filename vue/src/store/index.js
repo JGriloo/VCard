@@ -1,6 +1,8 @@
 import { createStore } from 'vuex'
 import axios from 'axios'
 
+
+
 export default createStore({
     state: {
         user: null,
@@ -10,16 +12,22 @@ export default createStore({
     },
     mutations: {
         resetUser(state) {
-            state.user = null
+            if (state.user) {
+                state.user = null
+            }
         },
         setUser(state, loggedInUser) {
             state.user = loggedInUser
         },
         resetVCard(state) {
+            this.$socket.emit('logged_out_vcard', state.vcard)
             state.vcard = null
         },
         setVCards(state, vcards) {
             state.vcard = vcards
+        },
+        setVCard(state, vcard) {
+            state.vcard = vcard
         },
         updateVCard(state, updateVCard) {
             let idx = state.vcard.findIndex((t) => t.phone_number === updateVCard.phone_number)
@@ -97,6 +105,7 @@ export default createStore({
             try {
                 let response = await axios.get('vcards/' + this.state.user.username)
                 context.commit('setVCards', response.data.data)
+                console.log("emit logged in vcard")
                 return response.data.data
             } catch (error) {
                 context.commit('resetVCard', null)
@@ -124,13 +133,35 @@ export default createStore({
         },
         async refresh(context) {
             let userPromise = context.dispatch('loadLoggedInUser')
-
             await userPromise
         },
         async updateVCard(context, vcard) {
             let response = await axios.put("vcards/" + vcard.phone_number, vcard)
             context.commit('updateVCard', response.data.data)
+            // this.$socket.emit('updateVcardTransaction', response.data.data)
             return response.data.data
+        },
+        async SOCKET_newCategory(context, category) {
+            console.log('Someone else has inserted a Category')
+            this.$toast.info(`A new Category was created (#${category.id} : ${category.name})`)
+            context.commit('insertCategory', category)
+        },
+        async SOCKET_updateVcardTransaction(_, vcardId) {
+            console.log(vcardId)
+            if (vcardId) {
+                this.$toast.info(`User #${vcardId} transaction history was updated`)
+            }
+            // console.log('Your vcard has been updated with a new transaction')
+            // console.log("context",context.state.vcard)
+            // console.log("vcard",vcard)
+            // if (context.state.vcard && vcard) {
+            //     context.commit('updateVcardTransaction',vcard)
+            //     if (vcard.id == context.state.vcard.id) {
+            //         context.commit('setVcard',vcard)
+            //         this.$toast.info('Your transaction history has been updated')
+            //     }else
+            //     this.$toast.info(`User #${vcard.id} was updated`)
+            // }
         },
     },
     modules: {},

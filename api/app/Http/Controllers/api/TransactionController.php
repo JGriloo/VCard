@@ -13,7 +13,7 @@ use Illuminate\Support\Carbon;
 
 class TransactionController extends Controller
 {
-    public function getTransactionsOfVCard(Request $request, VCard $vcard)
+    public function getTransactionsOfVCard(VCard $vcard)
     {
         return TransactionResource::collection($vcard->transactions);
     }
@@ -56,6 +56,26 @@ class TransactionController extends Controller
                 ]);
                 VCard::Where('phone_number', $pairTransaction->vcard)->update((['balance'=>$pairTransaction->new_balance]));
             }
+        });
+
+	return ["success" => "Data Inserted"];
+    }
+
+    public function storeSaving(StoreTransactionRequest $request, VCard $vcard)
+    {
+        DB::transaction(function () use ($request, $vcard){
+            $newTransaction = Transaction::create($request->validated());
+            $actualSavings = json_decode(VCard::where('phone_number', $newTransaction->vcard)->first()->custom_data);
+            if($actualSavings == null){
+                $actualSavings = 0;
+            }
+            $newTransaction->update([
+                'old_balance' => VCard::where('phone_number', $newTransaction->vcard)->first()->balance,
+                'new_balance' =>VCard::where('phone_number', $newTransaction->vcard)->first()->balance - $newTransaction->value,
+                'custom_data' =>json_encode($actualSavings + $newTransaction->value),
+            ]);
+            VCard::where('phone_number', $newTransaction->vcard)->update((['balance'=>($newTransaction->old_balance)-$newTransaction->value]));
+            VCard::where('phone_number', $newTransaction->vcard)->update((['custom_data'=>($newTransaction->custom_data)]));
         });
 
 	return ["success" => "Data Inserted"];

@@ -50,6 +50,7 @@ export default {
             console.warn(result);
             this.$toast.success("Category created successfully!");
             this.$store.commit("setCategories");
+            this.$socket.emit("newCategory", this.category);
             this.$router.push("/");
           });
         })

@@ -8,8 +8,6 @@ use App\Models\User;
 use App\Http\Resources\UserResource;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Requests\UpdateUserPasswordRequest;
-
-
 class UserController extends Controller
 {
     public function index()
@@ -30,7 +28,7 @@ class UserController extends Controller
     public function storeUser(StoreUserRequest $request)
     {
         $newUser = User::create($request->validated());
-        $newUser->password = Hash::make($request['password']);
+        $newUser->password->fill(['password'=> Hash::make($request['password'])]);
         $newUser->save();
         return new UserResource($newUser);
     }

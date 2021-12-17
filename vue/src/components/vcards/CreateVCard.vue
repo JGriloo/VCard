@@ -1,7 +1,7 @@
 <template>
   <form @submit.prevent="handleSubmit" method="post">
     <label>Phone Number:</label>
-    <input type="number" min="0" required v-model="phone_number" />
+    <input type="number" min="0" required v-model="phoneNr" />
     <div v-if="phoneNrError" class="error">{{ phoneNrError }}</div>
     <label>Name:</label>
     <input type="text" required v-model="name" />
@@ -10,7 +10,7 @@
     <label>Password:</label>
     <input type="password" required v-model="password" />
     <label>Confirmation Code:</label>
-    <input type="text" required v-model="confirmation_code" />
+    <input type="text" required v-model="confirmationCode" />
     <div class="submit">
       <button>Submit</button>
     </div>
@@ -22,11 +22,11 @@
 export default {
   data() {
     return {
-      phone_number: "",
+      phoneNr: "",
       name: "",
       email: "",
       password: "",
-      confirmation_code: "",
+      confirmationCode: "",
       phoneNrError: "",
       blocked: 0,
       balance: 0,
@@ -35,31 +35,31 @@ export default {
   },
   methods: {
     handleSubmit() {
-      if (this.phone_number < 900000000 || this.phone_number > 999999999) {
+      if (this.phoneNr < 900000000 || this.phoneNr > 999999999) {
         this.phoneNrError = "Invalid phone number";
       }
       if (!this.phoneNrError) {
-        console.log("phone nr: ", this.phone_number);
+        console.log("phone nr: ", this.phoneNr);
         console.log("email: ", this.email);
         console.log("password: ", this.password);
-        console.log("Confirmation Code: ", this.confirmation_code);
+        console.log("Confirmation Code: ", this.confirmationCode);
         console.log("Blocked", this.blocked);
         console.log("Balance ", this.balance);
-        console.log("Max_debit ", this.confirmation_code);
+        console.log("Max_debit ", this.confirmationCode);
       }
       this.$axios
         .post("newvcard", {
-          phone_number: this.phone_number.toString(),
+          phone_number: this.phoneNr.toString(),
           name: this.name,
           email: this.email,
           password: this.password,
-          confirmation_code: this.confirmation_code,
+          confirmation_code: this.confirmationCode,
           balance: this.balance,
           blocked: this.blocked,
           max_debit: this.max_debit,
         })
         .then((result) => {
-          this.$router.push("/");
+          alert("WELL DONE!");
           console.warn(result);
         })
         .catch((error) => {
