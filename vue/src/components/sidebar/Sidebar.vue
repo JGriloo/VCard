@@ -49,8 +49,8 @@ export default {
       >
     </h1>
 
-    <SidebarLink v-show="user && user.type == 'A'" to="/createvcard"
-      >Create vCard</SidebarLink
+    <SidebarLink v-show="!user" to="/createvcard"
+      ><i class="fas fa-arrow-circle-right"></i> Create VCard</SidebarLink
     >
     <SidebarLink v-show="!user" to="/login"
       ><i class="fas fa-arrow-circle-right"></i> Login</SidebarLink
@@ -70,6 +70,9 @@ export default {
     >
     <SidebarLink v-if="isLoggedIn" to="/mytransactions">
       <i class="fas fa-search-dollar"></i> My Transactions</SidebarLink
+    >
+    <SidebarLink v-if="isLoggedIn" to="/statistics">
+      <i class="fas fa-chart-bar"></i> Statistics</SidebarLink
     >
     <SidebarLink
       v-if="isLoggedIn && this.$store.state.user.type == 'A'"

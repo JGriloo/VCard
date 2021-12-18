@@ -67,6 +67,12 @@
                   </td>
                 </tr>
               </template>
+              <pagination
+                v-model="page"
+                :records="filteredTransactions.length()"
+                :per-page="25"
+                @paginate="filteredTransactions"
+              />
             </tbody>
           </table>
         </div>
@@ -82,18 +88,12 @@ import Datepicker from "vue3-date-time-picker";
 import "vue3-date-time-picker/dist/main.css";
 import { ref } from "vue";
 import moment from "moment";
+import Pagination from "v-pagination-3";
 
 export default {
   name: "Transaction History",
   setup() {
     const date = ref();
-
-    // For demo purposes assign range from the current date
-    /*onMounted(() => {
-          const startDate = new Date();
-          const endDate = new Date(new Date().setDate(startDate.getDate() + 7));
-          date.value = [startDate, endDate];
-      })*/
 
     return {
       date,
@@ -102,6 +102,7 @@ export default {
   components: {
     ConfirmationDialog,
     Datepicker,
+    Pagination,
   },
   data() {
     return {

@@ -17,6 +17,7 @@ import AdminLogin from '../components/auth/AdminLogin.vue'
 import VCardProfile from '../components/vcards/VCardProfile.vue'
 import ChangePassword from "../components/auth/ChangePassword.vue"
 import ChangeCode from "../components/auth/ChangeCode.vue"
+import Statistic from "../components/statistics/Statistic.vue"
 
 
 const routes = [
@@ -41,6 +42,12 @@ const routes = [
     path: '/savings',
     name: 'Savings',
     component: Saving,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/statistics',
+    name: 'Statistics',
+    component: Statistic,
     meta: { requiresAuth: true }
   },
   {

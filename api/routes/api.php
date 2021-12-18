@@ -8,6 +8,7 @@ use App\Http\Controllers\api\TransactionController;
 use App\Http\Controllers\api\VCardController;
 use App\Http\Controllers\api\UserController;
 use App\Http\Controllers\api\DefaultCategoryController;
+use App\Http\Controllers\api\StatisticController;
 
 
 /*
@@ -69,6 +70,7 @@ Route::middleware('auth:api')->group(function () {
     Route::delete('defaultcategories/{defaultCategory}', [DefaultCategoryController::class, 'destroyDefaultCategory']);
 
     //STATISTICS ROUTES
-    Route::get('statistics/{vcard}', [StatisticController::class, 'vcardStats']);
-    Route::get('transactionsperdate', [StatisticController::class, 'transactionsPerDate']);
 });
+
+Route::get('statistics/{vcard}', [StatisticController::class, 'vcardStats']);
+Route::get('statistics', [StatisticController::class, 'adminStats']);
