@@ -71,7 +71,7 @@ export default {
     <SidebarLink v-if="isLoggedIn" to="/mytransactions">
       <i class="fas fa-search-dollar"></i> My Transactions</SidebarLink
     >
-    <SidebarLink v-if="isLoggedIn" to="/statistics">
+    <SidebarLink v-if="isLoggedIn && this.$store.state.user.type=='A'" to="/statistics">
       <i class="fas fa-chart-bar"></i> Statistics</SidebarLink
     >
     <SidebarLink

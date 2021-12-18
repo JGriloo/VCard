@@ -116,13 +116,17 @@ export default {
       });
     },
     loadVCard() {
-      this.$axios.get("vcards/" + this.$store.state.user.id).then((result) => {
-        this.vcard = result.data.data;
-        this.isLoading = false;
-        if (this.vcard.custom_data == null) {
-          this.vcard.custom_data = 0;
-        }
-      });
+      setTimeout(() => {
+        this.$axios
+          .get("vcards/" + this.$store.state.user.id)
+          .then((result) => {
+            this.vcard = result.data.data;
+            this.isLoading = false;
+            if (this.vcard.custom_data == null) {
+              this.vcard.custom_data = 0;
+            }
+          });
+      }, 5000);
     },
   },
   mounted() {
