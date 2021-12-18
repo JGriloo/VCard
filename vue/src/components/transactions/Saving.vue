@@ -31,6 +31,8 @@
 </template>
 
 <script>
+import moment from "moment";
+
 export default {
   data() {
     return {
@@ -40,8 +42,8 @@ export default {
         value: "",
         type: "D",
         vcard: this.$store.state.user.id.toString(),
-        date: new Date().toJSON().slice(0, 10).replace(/-/g, "/"),
-        datetime: "2021-11-13 05:43:22",
+        date: moment().format("YYYY-MM-DD"),
+        datetime: moment().format("YYYY-MM-DD h:mm:ss"),
         old_balance: 0,
         new_balance: 0,
         payment_reference: this.$store.state.user.id.toString(),
@@ -54,8 +56,8 @@ export default {
         value: "",
         type: "C",
         vcard: this.$store.state.user.id.toString(),
-        date: new Date().toJSON().slice(0, 10).replace(/-/g, "/"),
-        datetime: "2021-11-13 05:43:22",
+        date: moment().format("YYYY-MM-DD"),
+        datetime: moment().format("YYYY-MM-DD h:mm:ss"),
         old_balance: 0,
         new_balance: 0,
         payment_reference: this.$store.state.user.id.toString(),
@@ -108,7 +110,7 @@ export default {
         this.removeSaving_referenceError = "";
       }
       this.$axios.post("removesaving", this.removeSaving).then((result) => {
-        this.$toast.warning("Withdraw from savings successfully!", {
+        this.$toast.success("Withdraw from savings successfully!", {
           duration: 5000,
         });
         this.$router.push("/");

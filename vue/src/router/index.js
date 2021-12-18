@@ -18,6 +18,7 @@ import VCardProfile from '../components/vcards/VCardProfile.vue'
 import ChangePassword from "../components/auth/ChangePassword.vue"
 import ChangeCode from "../components/auth/ChangeCode.vue"
 import Statistic from "../components/statistics/Statistic.vue"
+import IndividualStatistic from "../components/statistics/IndividualStatistic.vue"
 
 
 const routes = [
@@ -48,6 +49,12 @@ const routes = [
     path: '/statistics',
     name: 'Statistics',
     component: Statistic,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/mystatistics',
+    name: 'IndividualStatistic',
+    component: IndividualStatistic,
     meta: { requiresAuth: true }
   },
   {

@@ -51,12 +51,14 @@
       v-model="transactions.payment_type"
     />PayPal
     <br />
-    <div
-      v-if="
-        transactions.payment_type === 'VCARD' ||
-        transactions.payment_type === 'MBWAY'
-      "
-    >
+    <div v-if="transactions.payment_type === 'VCARD'">
+      <label>Addressee Phone Number:</label>
+      <input type="text" required v-model="transactions.payment_reference" />
+      <div v-if="payment_referenceError" class="error">
+        {{ payment_referenceError }}
+      </div>
+    </div>
+    <div v-if="transactions.payment_type === 'MBWAY'">
       <label>Addressee Phone Number:</label>
       <input type="text" required v-model="transactions.payment_reference" />
       <div v-if="payment_referenceError" class="error">
@@ -90,7 +92,13 @@
       </div>
     </div>
     <div v-if="transactions.payment_type === 'MB'">
-      <input type="hidden" required v-model="transactions.payment_reference" />
+      <label>Entity</label>
+      <input type="number" required v-model="entity" />
+      <div v-if="payment_referenceError" class="error">
+        {{ payment_referenceError }}
+      </div>
+      <label>Reference</label>
+      <input type="number" required v-model="transactions.payment_reference" />
       <div v-if="payment_referenceError" class="error">
         {{ payment_referenceError }}
       </div>
@@ -124,7 +132,7 @@ export default {
         value: "",
         type: "D",
         vcard: this.$store.state.user.id.toString(),
-        date: new Date().toJSON().slice(0, 10).replace(/-/g, "/"),
+        date: moment().format("YYYY-MM-DD"),
         datetime: moment().format("YYYY-MM-DD h:mm:ss"),
         old_balance: 0,
         new_balance: 0,
@@ -134,6 +142,7 @@ export default {
       },
       payment_referenceError: "",
       categories: [],
+      entity: null,
     };
   },
   methods: {
@@ -154,16 +163,16 @@ export default {
             "Invalid Phone Number: number must start with 9";
         }
       }
-      if (
-        this.transactions.payment_type == "VCARD" ||
-        this.transactions.payment_type == "MBWAY"
-      ) {
+      if (this.transactions.payment_type == "VCARD") {
         this.transactions.pair_vcard = this.transactions.payment_reference;
       }
       if (this.transactions.payment_type == "MB") {
-        this.transactions.payment_reference = Math.ceil(
-          Math.random() * 10000000000000
-        ).toString();
+        this.transactions.payment_reference =
+          this.transactions.payment_reference.toString();
+        this.payment_referenceError =
+          this.transactions.payment_reference.length !== 9
+            ? "Invalid Reference: needs 9 digits"
+            : "";
       }
       this.$axios.post("newtransaction", this.transactions).then((result) => {
         console.log("result", result);
@@ -174,7 +183,10 @@ export default {
           this.transactions.pair_vcard,
           this.transactions.vcard
         );
-        console.warn(result);
+        this.$toast.success("Withdraw from savings successfully!", {
+          duration: 5000,
+        });
+        this.$router.push("/");
       });
     },
     loadVCards() {
