@@ -52,20 +52,55 @@ export default {
     <SidebarLink v-show="!user" to="/createvcard"
       ><i class="fas fa-arrow-circle-right"></i> Create VCard</SidebarLink
     >
+    <SidebarLink v-show="user && user.type == 'A'" to="/users/create"
+      ><i class="fas fa-user-plus"></i> Create User</SidebarLink
+    >
+
     <SidebarLink v-show="!user" to="/login"
       ><i class="fas fa-arrow-circle-right"></i> Login</SidebarLink
     >
+    <SidebarLink
+      v-if="isLoggedIn && user.type == 'V'"
+      :to="{
+        name: 'VCardProfile',
+        params: { phone_number: this.$store.state.user.id },
+      }"
+      ><i class="fas fa-user"></i> Profile</SidebarLink
+    >
+    <SidebarLink
+      v-if="isLoggedIn && user.type == 'V'"
+      :to="{
+        name: 'VCard',
+        params: { phone_number: this.$store.state.user.id },
+      }"
+      ><i class="far fa-address-card"></i> Manage your vCard</SidebarLink
+    >
+    <SidebarLink
+      v-if="isLoggedIn && user.type == 'A'"
+      :to="{
+        name: 'AdminDashboard',
+        params: { id: this.$store.state.user.id },
+      }"
+      ><i class="fas fa-user"></i> Profile</SidebarLink
+    >
 
-    <SidebarLink v-if="isLoggedIn" to="/createcategory"
+    <SidebarLink v-if="isLoggedIn && user.type == 'A'" :to="{ name: 'Users' }"
+      ><i class="fas fa-user-friends"></i> Admins</SidebarLink
+    >
+    <SidebarLink v-if="isLoggedIn && user.type == 'A'" :to="{ name: 'VCards' }"
+      ><i class="far fa-id-card"></i> vCards</SidebarLink
+    >
+
+    <SidebarLink v-if="isLoggedIn && user.type == 'V'" to="/createcategory"
       ><i class="fas fa-list"></i> Create Category</SidebarLink
     >
-    <SidebarLink v-if="isLoggedIn" to="/mycategories">
+    <SidebarLink v-if="isLoggedIn && user.type == 'V'" to="/mycategories">
       <i class="far fa-list-alt"></i> My Categories</SidebarLink
     >
     <SidebarLink v-if="isLoggedIn" to="/transactions"
       ><i class="fas fa-dollar-sign"></i> New Transactions</SidebarLink
     >
-    <SidebarLink v-if="isLoggedIn" to="/savings"
+    <SidebarLink v-if="isLoggedIn && user.type == 'V'" to="/savings"
       ><i class="fas fa-piggy-bank"></i> Savings</SidebarLink
     >
     <SidebarLink v-if="isLoggedIn" to="/mytransactions">
@@ -87,23 +122,6 @@ export default {
       v-if="isLoggedIn && this.$store.state.user.type == 'A'"
       to="/categories"
       ><i class="fas fa-user"></i>Default Categories</SidebarLink
-    >
-
-    <SidebarLink
-      v-if="isLoggedIn && user.type == 'V'"
-      :to="{
-        name: 'VCardProfile',
-        params: { phone_number: this.$store.state.user.id },
-      }"
-      ><i class="fas fa-user"></i> Profile</SidebarLink
-    >
-    <SidebarLink
-      v-if="isLoggedIn && user.type == 'V'"
-      :to="{
-        name: 'VCard',
-        params: { phone_number: this.$store.state.user.id },
-      }"
-      ><i class="far fa-address-card"></i> Manage your vCard</SidebarLink
     >
 
     <SidebarLink

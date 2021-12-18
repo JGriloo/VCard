@@ -36,6 +36,7 @@
         type="button"
         class="btn btn-primary px-5"
         @click="goToAdminLogin()"
+        style="background-color: grey;"><i class="fas fa-arrow-circle-right"></i>
       >
         Admin Login
       </button>

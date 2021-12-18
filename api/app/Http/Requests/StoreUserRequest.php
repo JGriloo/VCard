@@ -3,8 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Password;
 
-class UpdateUserConfirmationCodeRequest extends FormRequest
+class StoreUserRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,8 +25,8 @@ class UpdateUserConfirmationCodeRequest extends FormRequest
     public function rules()
     {
         return [
-            'current_password' => 'current_password:api',
-            'confirmation_code' => ['required', 'confirmed', 'digits:4'],
+            'name' => 'required|string|max:50',
+            'email' => 'required|email',
         ];
     }
 }

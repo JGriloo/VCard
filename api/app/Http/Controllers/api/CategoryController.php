@@ -4,12 +4,15 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
-use App\Http\Resources\CategoryResource;
-use App\Http\Requests\StoreCategoryRequest;
-use App\Http\Resources\DefaultCategoryResource;
 use App\Models\DefaultCategory;
+use App\Http\Resources\CategoryResource;
+use App\Http\Resources\DefaultCategoryResource;
+use App\Http\Requests\StoreCategoryRequest;
+use App\Http\Requests\StoreDefaultCategoryRequest;
+use App\Http\Requests\StoreDefaultCategoryResource;
 use App\Models\VCard;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
@@ -17,6 +20,12 @@ class CategoryController extends Controller
     {
         return CategoryResource::collection(Category::all());
     }
+
+    public function getDefaultCategory()
+    {
+        return DefaultCategoryResource::collection(DefaultCategory::all());
+    }
+
 
     public function show(Category $category)
     {
@@ -29,7 +38,7 @@ class CategoryController extends Controller
         return new CategoryResource($newCategory);
     }
 
-    public function showMyCategories(VCard $vcard){
+    public function showMyCategory(VCard $vcard){
         return CategoryResource::collection($vcard->categories);
     }
 
@@ -37,6 +46,18 @@ class CategoryController extends Controller
     {
         $category->update($request->validated());
         return new CategoryResource($category);
+    }
+
+
+    public function storeDefaultCategory(StoreDefaultCategoryRequest $request, DefaultCategory $category) {
+        $newDefaultCategory = DefaultCategory::create($request->validated());
+        return new DefaultCategoryResource($newDefaultCategory);
+    }
+
+    public function deleteDefaultCategory(DefaultCategory $category)
+    {
+        $category = DefaultCategory::findOrFail($category->id);
+        $category->delete();
     }
 
     //Soft delete, it will stay in the DB

@@ -9,16 +9,38 @@ export default createStore({
         vcard: null,
         categoryTypes: ["D", "C"],
         userCategories: [],
+        users: [],
+        vcards: [],
     },
     mutations: {
+        setUser(state, loggedInUser) {
+            state.user = loggedInUser
+        },
         resetUser(state) {
             if (state.user) {
                 state.user = null
             }
         },
-        setUser(state, loggedInUser) {
-            state.user = loggedInUser
+
+        updateUser(state, updateUser) {
+            let idx = state.users.findIndex((t) => t.id === updateUser.id)
+            if (idx >= 0) {
+                state.users[idx] = updateUser
+            }
         },
+        deleteUser(state, deleteUser) {
+            let idx = state.users.findIndex((t) => t.id === deleteUser.id)
+            if (idx >= 0) {
+                state.users.splice(idx, 1)
+            }
+        },
+        setUsers(state, users) {
+            state.users = users
+        },
+        resetUsers(state) {
+            state.users = null
+        },
+
         resetVCard(state) {
             this.$socket.emit('logged_out_vcard', state.vcard)
             state.vcard = null
@@ -69,6 +91,12 @@ export default createStore({
             }
             await context.dispatch('refresh')
         },
+        async changedPassword(context, vcard) {
+            let response = await axios.patch("vcards/" + vcard.phone_number + "/password", vcard)
+            context.commit('updateVcard', response.data.data)
+            return response.data.data
+
+        },
         async logout(context) {
             try {
                 await axios.post('logout')
@@ -94,12 +122,6 @@ export default createStore({
             } catch (error) {
                 context.commit('resetUserCategories', null)
             }
-        },
-        async changedPassword(context, vcard) {
-            let response = await axios.patch("vcards/" + vcard.phone_number + "/password", vcard)
-            context.commit('updateVcard', response.data.data)
-            return response.data.data
-
         },
         async loadVCard(context) {
             try {
@@ -131,9 +153,31 @@ export default createStore({
                 throw error
             }
         },
+        async loadUsers(context) {
+            try {
+                let response = await axios.get('users')
+                context.commit('setUsers', response.data.data)
+                return response.data.data
+            } catch (error) {
+                context.commit('resetUsers', null)
+                throw error
+            }
+        },
+        async updateUser(context, user) {
+            let response = await axios.put("users/" + user.id, user)
+            context.commit('updateUser', response.data.data)
+            return response.data.data
+        },
+        async deleteUser(context, user) {
+            let response = await axios.delete("users/" + user.id)
+            context.commit('deleteUser', response.data.data)
+            return response.data.data
+        },
         async refresh(context) {
             let userPromise = context.dispatch('loadLoggedInUser')
+            let usersPromise = context.dispatch('loadUsers')
             await userPromise
+            await usersPromise
         },
         async updateVCard(context, vcard) {
             let response = await axios.put("vcards/" + vcard.phone_number, vcard)
@@ -177,6 +221,22 @@ export default createStore({
         },
         getBalance(state) {
             return (state.vcard.balance)
-        }
+        },
+        users: state => {
+            return state.users.filter(users => users.type === 'A')
+        },
+        vcardsFilter: (state) => (filter) => {
+            return state.users.filter(users => users.name === filter.name)
+        },
+        totalUsers: (state, getters) => {
+            return getters.users.length
+          },
+          totalVCards: (state) => {
+            return state.users.filter(users => users.type === 'V').length
+          },
+          vcards: state => {
+            return state.users.filter(users => users.type === 'V')
+          },
+          
     }
 })

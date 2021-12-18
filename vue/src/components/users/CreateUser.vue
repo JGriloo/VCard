@@ -1,27 +1,11 @@
 <template>
   <form @submit.prevent="handleSubmit" method="post">
-    <label>Name:</label>
-    <input
-      type="text"
-      name="category name"
-      required
-      v-model="categories.name"
-    />
-    <label>Category Type:</label>
-    <input
-      type="radio"
-      name="category type"
-      value="C"
-      v-model="categories.type"
-    />Credit
-    <br />
-    <input
-      type="radio"
-      name="category type"
-      value="D"
-      v-model="categories.type"
-    />Debit
-    <br />
+    <label style="color: black;">Name:</label>
+    <input type="text" required v-model="name" />
+    <label style="color: black;">Email:</label>
+    <input type="email" required v-model="email" />
+    <label style="color: black;">Password:</label>
+    <input type="password" required v-model="password" />
     <div class="submit">
       <button>Submit</button>
     </div>
@@ -30,34 +14,30 @@
 
 
 <script>
-//import { router } from "../../router/index";
 export default {
   data() {
     return {
-      categories: {
-        type: "",
-        name: "",
-        vcard: this.$store.state.user.id.toString(),
-      },
+      name: "",
+      email: "",
+      password: "",
     };
   },
   methods: {
     handleSubmit() {
-      setTimeout(() => {
-      this.vcard_up = this.$axios
-        .get(`vcards/${this.categories.vcard}`)
-        .then(() => {
-          this.$axios.post("newcategory", this.categories).then((result) => {
-            console.warn(result);
-            this.$toast.success("Category created successfully!");
-            this.$store.commit("setCategories");
-            this.$socket.emit("newCategory", this.category);
-            this.$router.push("/");
-          });
+      this.$axios
+        .post("/users/create", {
+          name: this.name,
+          email: this.email,
+          password: this.password,
         })
-        .catch((error) => error);
-      
-    },3000)
+        .then((result) => {
+          this.$toast.success("User created successfully.")
+          this.$router.push("/");
+          console.warn(result);
+        })
+        .catch((error) => {
+          console.log("ERRRR:: ", error.response.data);
+        });
     },
   },
 };

@@ -19,6 +19,15 @@ import ChangePassword from "../components/auth/ChangePassword.vue"
 import ChangeCode from "../components/auth/ChangeCode.vue"
 import Statistic from "../components/statistics/Statistic.vue"
 import IndividualStatistic from "../components/statistics/IndividualStatistic.vue"
+import CreateUser from "../components/users/CreateUser.vue"
+import AdminDashboard from "../components/users/AdminDashboard.vue"
+import User from "../components/users/User.vue"
+import Users from "../components/users/Users.vue"
+import VCards from "../components/users/VCards.vue"
+import DefaultCategories from "../components/users/DefaultCategories.vue"
+import AddCategory from "../components/users/AddCategory.vue"
+import store from '../store'
+
 
 
 const routes = [
@@ -58,9 +67,10 @@ const routes = [
     meta: { requiresAuth: true }
   },
   {
-    path: '/code',
+    path: '/vcards/:phone_number/confirmationcode',
     name: 'ChangeCode',
-    component: ChangeCode
+    component: ChangeCode,
+    props: route => ({ phone_number: parseInt(route.params.phone_number) }) 
   },
   {
     path: '/adminlogin',
@@ -140,12 +150,82 @@ const routes = [
     path: '/:catchAll(.*)',
     name: 'NotFound',
     component: NotFound
+  },
+  {
+    path: '/users/create',
+    name: 'CreateUser',
+    component: CreateUser
+  },
+  {
+    path: '/users/:id',
+    name: 'AdminDashboard',
+    component: AdminDashboard,
+    props: route => ({ id: parseInt(route.params.id) })
+  },
+  {
+    path: '/users/:id',
+    name: 'User',
+    component: User,
+    props: route => ({ id: parseInt(route.params.id) })
+  },
+  {
+    path: '/users/edit/:id',
+    name: 'UserDetails',
+    component: User,
+    props: route => ({ id: parseInt(route.params.id) })
+  },
+  {
+    path: '/users',
+    name: 'Users',
+    component: Users,
+  },
+  {
+    path: '/categories/default',
+    name: 'DefaultCategories',
+    component: DefaultCategories,
+  },
+  {
+    path: '/categories/add',
+    name: 'AddCategory',
+    component: AddCategory,
+  },
+  {
+    path: '/vcards',
+    name: 'VCards',
+    component: VCards,
+  },
+  {
+    path: '/:catchAll(.*)',
+    name: 'NotFound',
+    component: NotFound
   }
+  
 ]
 
 const router = createRouter({
   history: createWebHashHistory(process.env.BASE_URL),
   routes
+})
+
+
+router.beforeEach((to, from, next) => {
+  if ((to.name == 'Login') || (to.name == 'AdminLogin') || (to.name == 'Home') || (to.name =='Create')) {
+    next()
+    return
+  }
+  if (!store.state.user) {
+    next({ name: 'Login' })
+    return
+  }
+  if (to.name == 'Users' || to.name == 'User' || to.name == 'AdminDashboard' || to.name == 'DefaultCategories' ||  to.name == 'AddCategory') {
+    if ((store.state.user.type == 'A')) {
+      next()
+      return
+    }
+    next(false)
+    return
+  }
+  next()
 })
 
 export default router

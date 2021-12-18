@@ -4,7 +4,7 @@
       PROFILE
     </div>
     <hr />
-    <h2>VCard # {{ vcard.phone_number }}</h2>
+    <h2>vCard # {{ vcard.phone_number }}</h2>
     <h2>Name: {{ vcard.name }}</h2>
     <h2>Email: {{ vcard.email }}</h2>
     <div class="mb-3">
@@ -22,22 +22,22 @@
           position: absolute;
           left: 200px;
           text-decoration: none;
-          background-color: grey;
+          background-color: orange;
         "
       >
-        Change Password
+        <i class="fas fa-key"></i> Change Password
       </button>
       <button
         @click="goToChangeCode()"
         style="
           position: absolute;
           left: 200px;
-          top: 400px;
+          top: 490px;
           text-decoration: none;
-          background-color: grey;
+          background-color: orange;
         "
       >
-        Change Confirmation Code
+        <i class="fas fa-key"></i> Change Confirmation Code
       </button>
     </div>
   </div>
@@ -45,58 +45,60 @@
 
 <script>
 export default {
-  name: "VCardProfile",
-  props: {
+    name: 'CardProfile',
+    props: {
     phone_number: {
       type: Number,
-      default: null,
+      default: null
+      }
+     },
+    data () {
+        return {
+        vcard: null,
+        }
     },
-  },
-  data() {
-    return {
-      vcard: null,
-    };
-  },
-  watch: {
+    watch: {
     phone_number: {
       immediate: true,
-      handler(newValue) {
-        this.loadVCard(newValue);
-      },
-    },
+      handler (newValue) {
+        this.loadVcard(newValue)
+      }
+    }
   },
-  methods: {
-    dataAsString() {
-      return JSON.stringify(this.vcard);
+    methods: {
+        dataAsString () {
+      return JSON.stringify(this.vcard)
     },
-    loadVCard(phone_number) {
-      this.$axios
-        .get("vcards/" + phone_number)
-        .then((response) => {
-          this.vcard = response.data.data;
-          console.log(this.vcard);
-          this.originalValueStr = this.dataAsString();
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      loadVcard (phone_number) {
+                setTimeout(() => {
+        this.$axios.get('vcards/' + phone_number)
+          .then((response) => {
+            this.vcard = response.data.data
+            console.log(this.vcard)
+            this.originalValueStr = this.dataAsString()
+          })
+          .catch((error) => {
+            console.log(error)
+          })
+        },3000)},
+
+
+        goToChangePassword () {
+          this.$router.push('/vcards/' + this.vcard.phone_number + '/password'); 
+        },
+        goToChangeCode () {
+          this.$router.push('/vcards/' + this.vcard.phone_number + '/confirmationcode');
+        }
     },
-    goToChangePassword() {
-      this.$router.push("/vcards/" + this.vcard.phone_number + "/password");
-    },
-    goToChangeCode() {
-      this.$router.push("/code");
-    },
-  },
-  computed: {
-    photoFullUrl() {
+    computed: {
+     photoFullUrl () {
       return this.$store.state.user.photo_url
         ? this.$serverUrl + "/storage/fotos/" + this.$store.state.user.photo_url
-        : "./assets/img/avatar-none.png";
+        : "./assets/img/avatar-none.png"
     },
-    isLoggedIn() {
-      return this.$store.getters.isLoggedIn;
+    isLoggedIn(){
+    return this.$store.getters.isLoggedIn
     },
-  },
-};
+  }
+}
 </script>

@@ -1,133 +1,111 @@
 <template>
-  <div>
-    <div v-if="isLoading">
-      <img src="../../../public/loading.gif" />
-      <h1>Loading the page</h1>
-    </div>
-    <div v-if="!isLoading">
-      <VCardDetails
-        :vcard="vcard"
-        :errors="errors"
-        @save="save"
-        @cancel="cancel"
-      ></VCardDetails>
-    </div>
-  </div>
+  
+  <VCardDetails
+    :vcard="vcard"
+    :errors="errors"
+    @save="save"
+    @cancel="cancel"
+  ></VCardDetails>
+
 </template>
 
 <script>
-import VCardDetails from "./VCardDetails.vue";
+/* eslint-disable vue/no-unused-components */
+import VCardDetails from './VCardDetails.vue'
 
 export default {
-  name: "VCard",
+  name: 'VCard',
   components: {
-    VCardDetails,
+    VCardDetails
   },
   props: {
     phone_number: {
       type: Number,
-      default: null,
-    },
+      default: null
+    }
   },
   data() {
     return {
-      //vcard: this.newVcard(),
-      vcard: this.newVCard(),
-      errors: null,
-      isLoading: true,
-    };
+        vcard: this.newVcard(),
+        errors: null,
+    }
   },
   watch: {
     phone_number: {
       immediate: true,
-      handler(newValue) {
-        this.loadVCard(newValue);
-      },
-    },
+      handler (newValue) {
+        this.loadVcard(newValue)
+      }
+    }
   },
   methods: {
-    dataAsString() {
-      return JSON.stringify(this.vcard);
+    dataAsString () {
+      return JSON.stringify(this.vcard)
     },
-    newVCard() {
+    newVcard() {
       return {
         phone_number: null,
-        name: "",
-        email: "",
-        photo_url: null,
-        isLoading: true,
-      };
-    },
-    loadVCard(phone_number) {
-      this.errors = null;
-      if (!phone_number || phone_number < 0) {
-        this.vcard = this.newVCard();
-        this.originalValueStr = this.dataAsString();
-      } else {
-        this.$axios
-          .get("vcards/" + phone_number)
-          .then((response) => {
-            this.isLoading = false;
-            this.vcard = response.data.data;
-            console.log(this.vcard);
-            this.originalValueStr = this.dataAsString();
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+        name: '',
+        email: '',
+        max_debit: '',
+        photo_url: null
       }
     },
-    save() {
-      this.errors = null;
-      this.$axios
-        .put("vcards/" + this.phone_number, this.vcard)
+    loadVcard (phone_number) {
+      this.errors = null
+      if (!phone_number || (phone_number < 0)) {
+        this.vcard = this.newVcard()
+        this.originalValueStr = this.dataAsString()
+      } else {
+        this.$axios.get('vcards/' + phone_number)
+          .then((response) => {
+            this.vcard = response.data.data
+            console.log(this.vcard)
+            this.originalValueStr = this.dataAsString()
+          })
+          .catch((error) => {
+            console.log(error)
+          })
+      }
+    },
+    save () {
+      this.errors = null
+      this.$axios.put('vcards/' + this.phone_number, this.vcard)
         .then((response) => {
-          this.$toast.success(
-            "VCard #" +
-              response.data.data.phone_number +
-              " was updated successfully."
-          );
-          this.vcard = response.data.data;
-          this.originalValueStr = this.dataAsString();
-          this.$store.commit("updateVCard", response.data.data);
+          this.$toast.success('vCard #' + response.data.data.phone_number + ' was updated successfully.')
+          this.vcard = response.data.data
+          this.originalValueStr = this.dataAsString()
+          this.$store.commit('updateVCard', response.data.data)
           this.$router.back();
         })
         .catch((error) => {
           if (error.response.status == 422) {
-            this.$toast.error(
-              "VCard #" +
-                this.phone_number +
-                " was not updated due to validation errors!"
-            );
-            this.errors = error.response.data.errors;
+            this.$toast.error('vCard #' + this.phone_number + ' was not updated due to validation errors!')
+            this.errors = error.response.data.errors
           } else {
-            this.$toast.error(
-              "VCard #" +
-                this.phone_number +
-                " was not updated due to unknown server error!"
-            );
+            this.$toast.error('vCard #' + this.phone_number + ' was not updated due to unknown server error!')
           }
-        });
+        })
     },
-    cancel() {
+    cancel () {
       // Replace this code to navigate back
       // this.loadUser(this.id)
-      this.$router.back();
+      this.$router.back()
     },
-    leaveConfirmed() {
+    leaveConfirmed () {
       if (this.nextCallBack) {
-        this.nextCallBack();
+        this.nextCallBack()
       }
-    },
+    }
   },
   computed: {
-    photoFullUrl() {
+     photoFullUrl () {
       return this.vcard.photo_url
         ? this.$serverUrl + "/storage/fotos/" + this.vcard.photo_url
-        : "./assets/img/avatar-none.png";
+        : "./assets/img/avatar-none.png"
     },
-  },
-};
+  }
+}
 </script>
 
 <style scoped lang="scss">
@@ -135,4 +113,5 @@ export default {
   color: white;
   background-color: brown;
 }
+
 </style>

@@ -14,6 +14,15 @@
           <label for="H">Debit</label>
         </div>
       </div>
+      <button
+        type="button"
+        class="btn btn-primary px-5"
+        style="background-color: blue; border-radius: 5px; width: 150px"
+        @click="addCategory"
+      >
+        <i class="fas fa-plus"></i> Add Category
+      </button>
+      <hr>
       <table class="table">
         <td>Total Default Categories: {{ totalDefaultCategories }}</td>
         <thead>
@@ -34,7 +43,8 @@
               <button
                 class="btn btn-danger btn-sm"
                 @click="deleteDefaultCategory(defaultCategory)"
-              >
+                style="background-color: red; border-radius: 5px;"
+              ><i class="fas fa-trash-alt"></i>
                 Delete
               </button>
               <button
@@ -94,6 +104,9 @@ export default {
         name: "EditDefaultCategory",
         params: { id: defaultCategory.id },
       });
+    },
+    addCategory() {
+        this.$router.push({name: 'AddCategory'})
     },
   },
   computed: {
